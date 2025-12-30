@@ -26,8 +26,8 @@ Manualne pisanie fiszek wymaga znacznego czasu i dyscypliny, co skutkuje porzuca
    - Rejestracja, logowanie, wylogowanie przez Supabase Auth.
    - Zmiana hasła oraz samodzielne usunięcie konta.
 6. Algorytm powtórek:
-   - Integracja z biblioteką typu Anki/SuperMemo do wyznaczania harmonogramu.
-   - Synchronizacja statusu fiszki (kolejka, wynik powtórki) z bazą.
+   - Integracja z gotowym algorytmem do wyznaczania harmonogramu.
+   - Brak zaawansowanych funkcji oraz metadanych w MVP
 7. Observability i dane:
    - Logowanie zdarzeń (akceptacja, odrzucenie, źródło fiszki) w bazie do kalkulacji KPI.
    - Brak zewnętrznej analityki; raporty realizowane zapytaniami do bazy.
@@ -39,7 +39,6 @@ Manualne pisanie fiszek wymaga znacznego czasu i dyscypliny, co skutkuje porzuca
 1. W zakresie:
    - Webowa aplikacja desktop/mobile-web.
    - Jedna persona, brak ról administracyjnych.
-   - Biblioteka spaced repetition jako komponent zewnętrzny (bez autorskiego algorytmu).
 2. Poza zakresem MVP:
    - Import dokumentów (PDF, DOCX, itp.) oraz API do masowego wgrywania treści.
    - Współdzielenie lub publikowanie zestawów między użytkownikami.
@@ -87,6 +86,7 @@ Kryteria akceptacji:
 - Lista kandydatów jest renderowana pod formularzem i pozostaje w pamięci do zakończenia sesji.  
 - Dla każdej fiszki dostępne są przyciski akcji; edycja otwiera modal z polami front/back.  
 - Po potwierdzeniu decyzji tylko zaakceptowane fiszki zapisują się w bazie, reszta jest odrzucana lokalnie.
+- W bazie przechowujemy również źródło z którego wygenerowano fiszki z informacjami o tym ile z nich zostało zaakceptowanych/odrzuconych.
 
 ID: US-006  
 Tytuł: Manualne tworzenie fiszki  
@@ -132,12 +132,11 @@ ID: US-011
 Tytuł: Telemetria KPI w bazie  
 Opis: Jako właściciel produktu chcę odczytywać wskaźniki akceptacji i udziału AI bezpośrednio z bazy, by ocenić sukces MVP.  
 Kryteria akceptacji:  
-- Każde zapisanie fiszki rejestruje źródło (AI/manualne) i decyzję (zaakceptowana/odrzucona).  
+- Każde zapisanie fiszki rejestruje źródło (AI/manualne)
+-   
 - Można uruchomić zapytanie SQL zwracające procent akceptacji i udział fiszek z AI dla wybranego okresu.  
-- Dane są spójne ze stanem aplikacji (brak duplikatów po ponownym zapisie).
 
 ## 6. Metryki sukcesu
 1. 75% fiszek wygenerowanych przez AI jest akceptowanych po recenzji użytkownika (mierzone relacją zaakceptowanych do wszystkich wygenerowanych w bazie).
 2. 75% wszystkich fiszek tworzonych przez użytkowników pochodzi z funkcji AI (źródło = AI w logach zapisu).
 3. Odsetek sesji powtórek zakończonych bez błędów synchronizacji ⩾ 95% (logi integracji biblioteki).
-4. Minimum 90% zakończonych operacji formularzowych (AI i manualnych) kończy się sukcesem za pierwszym razem, co wskazuje na skuteczność walidacji i UX.
