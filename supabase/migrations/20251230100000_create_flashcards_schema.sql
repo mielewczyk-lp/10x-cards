@@ -14,7 +14,7 @@
 create table generation_sources (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
-  input_text text not null check (length(input_text) between 1000 and 10000),
+  input_text_hash text not null,
   model_name varchar(100),
   total_generated integer not null check (total_generated >= 0),
   total_accepted integer not null default 0 check (total_accepted >= 0),
@@ -29,7 +29,7 @@ create table generation_sources (
 comment on table generation_sources is 'stores ai flashcard generation sessions with kpi metrics for tracking acceptance rates and user engagement';
 
 -- add column comments for clarity
-comment on column generation_sources.input_text is 'source text provided by user for ai generation, must be 1000-10000 chars';
+comment on column generation_sources.input_text_hash is 'md5 hash of source text used to deduplicate user submissions';
 comment on column generation_sources.total_generated is 'total number of flashcards generated in this session';
 comment on column generation_sources.total_accepted is 'count of flashcards accepted without edits';
 comment on column generation_sources.total_accepted_edited is 'count of flashcards accepted after user modifications';
@@ -143,17 +143,6 @@ create policy generation_sources_delete_own
 comment on policy generation_sources_delete_own on generation_sources is 
   'allows authenticated users to delete only their own generation sessions';
 
--- policy: service role bypass (for backend operations)
-create policy generation_sources_service_role_all
-  on generation_sources
-  for all
-  to service_role
-  using (true)
-  with check (true);
-
-comment on policy generation_sources_service_role_all on generation_sources is 
-  'allows service_role to perform any operation for backend maintenance and migrations';
-
 -- -----------------------------------------------------------------------------
 -- rls policies: flashcards
 -- purpose: ensure users can only access their own flashcards
@@ -199,17 +188,6 @@ create policy flashcards_delete_own
 
 comment on policy flashcards_delete_own on flashcards is 
   'allows authenticated users to delete only their own flashcards';
-
--- policy: service role bypass (for backend operations)
-create policy flashcards_service_role_all
-  on flashcards
-  for all
-  to service_role
-  using (true)
-  with check (true);
-
-comment on policy flashcards_service_role_all on flashcards is 
-  'allows service_role to perform any operation for backend maintenance and migrations';
 
 -- -----------------------------------------------------------------------------
 -- triggers: automatically update updated_at timestamp

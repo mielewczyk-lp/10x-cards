@@ -69,7 +69,7 @@ export interface Database {
           created_at: string;
           error_message: string | null;
           id: string;
-          input_text: string;
+          input_text_hash: string;
           model_name: string | null;
           total_accepted: number;
           total_accepted_edited: number;
@@ -82,7 +82,7 @@ export interface Database {
           created_at?: string;
           error_message?: string | null;
           id?: string;
-          input_text: string;
+          input_text_hash: string;
           model_name?: string | null;
           total_accepted?: number;
           total_accepted_edited?: number;
@@ -95,7 +95,7 @@ export interface Database {
           created_at?: string;
           error_message?: string | null;
           id?: string;
-          input_text?: string;
+          input_text_hash?: string;
           model_name?: string | null;
           total_accepted?: number;
           total_accepted_edited?: number;

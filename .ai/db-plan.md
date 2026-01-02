@@ -9,7 +9,7 @@
 ### generation_sources
 - `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`
 - `user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE`
-- `input_text TEXT NOT NULL CHECK (length(input_text) BETWEEN 1000 AND 10000)`
+- `input_text_hash TEXT NOT NULL`
 - `model_name VARCHAR(100)`
 - `total_generated INTEGER NOT NULL CHECK (total_generated >= 0)`
 - `total_accepted INTEGER NOT NULL DEFAULT 0 CHECK (total_accepted >= 0)`
@@ -51,8 +51,6 @@
   - `INSERT`: `WITH CHECK (user_id = auth.uid())`
   - `UPDATE`: `USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid())`
   - `DELETE`: `USING (user_id = auth.uid())`
-- Dodatkowa policy `USING (true)` dla roli serwisowej Supabase (service_role).
-
 
 5. Dodatkowe uwagi
 - Utrzymuj spójność kolumn `updated_at` za pomocą triggera `SET updated_at = NOW()` na `generation_sources` i `flashcards`.

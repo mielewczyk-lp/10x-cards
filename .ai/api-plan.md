@@ -20,7 +20,7 @@ Supabase handles sign-up, sign-in, sign-out, password reset and user deletion th
 
 | Verb | Path | Description |
 |------|------|-------------|
-| POST | `/generation-sources` | Start AI generation, persist `input_text`, call OpenRouter, return list of candidates |
+| POST | `/generation-sources` | Start AI generation, persist `input_text_hash`, call OpenRouter, return list of candidates |
 | GET  | `/generation-sources/{id}` | Fetch metadata & stats for one source (no candidates) |
 | PATCH| `/generation-sources/{id}` | Update `total_*` stats after user review |
 | GET  | `/generation-sources` | Paginated list filtered by current user |

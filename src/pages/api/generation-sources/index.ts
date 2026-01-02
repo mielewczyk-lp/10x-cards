@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Step 2: Insert initial record in generation_sources table
     const insertData: GenerationSourceInsert = {
       user_id: DEFAULT_USER_ID,
-      input_text: inputTextHash,
+      input_text_hash: inputTextHash,
       total_generated: 0,
       total_accepted: 0,
       total_accepted_edited: 0,
