@@ -1,12 +1,14 @@
 1. Lista tabel z kolumnami
 
 ### auth.users (zarządzane przez Supabase Auth)
+
 - `id UUID PRIMARY KEY`
 - `email TEXT UNIQUE NOT NULL`
 - `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 - ... (pozostałe kolumny zarządzane przez Supabase Auth)
 
 ### generation_sources
+
 - `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`
 - `user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE`
 - `input_text_hash TEXT NOT NULL`
@@ -20,6 +22,7 @@
 - `updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 
 ### flashcards
+
 - `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`
 - `user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE`
 - `generation_source_id UUID NULL REFERENCES generation_sources(id) ON DELETE SET NULL`
@@ -30,21 +33,21 @@
 - `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 - `updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 
-
 2. Relacje między tabelami
+
 - `auth.users 1:N generation_sources` (ON DELETE CASCADE)
 - `generation_sources 1:N flashcards` (ON DELETE SET NULL, nullable FK)
 - `auth.users 1:N flashcards` (ON DELETE CASCADE)
 
-
 3. Indeksy
+
 - `CREATE INDEX idx_generation_sources_user_created ON generation_sources(user_id, created_at DESC);`
 - `CREATE INDEX idx_flashcards_user_created ON flashcards(user_id, created_at DESC);`
 - `CREATE INDEX idx_flashcards_user_updated ON flashcards(user_id, updated_at DESC NULLS LAST);`
 - `CREATE INDEX idx_flashcards_search ON flashcards USING GIN(search_vector);`
 
-
 4. Zasady PostgreSQL (RLS)
+
 - Włącz RLS na `generation_sources` i `flashcards`.
 - Polityki wspólne:
   - `SELECT`: `USING (user_id = auth.uid())`
@@ -53,8 +56,8 @@
   - `DELETE`: `USING (user_id = auth.uid())`
 
 5. Dodatkowe uwagi
+
 - Utrzymuj spójność kolumn `updated_at` za pomocą triggera `SET updated_at = NOW()` na `generation_sources` i `flashcards`.
 - Hard delete w całej bazie; usunięcie użytkownika kaskadowo usuwa jego źródła i fiszki.
 - Telemetria KPI pochodzi z pól statystycznych `generation_sources` oraz `source_type` w `flashcards`, co pozwala raportować udział AI vs manual oraz wskaźniki akceptacji.
 - Brak tabel sesji powtórek oraz metadanych spaced repetition w MVP zgodnie z decyzjami architektonicznymi; struktura pozwala na ich dodanie w przyszłości (np. FK do `flashcards`).
-

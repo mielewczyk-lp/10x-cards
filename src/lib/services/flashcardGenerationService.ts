@@ -1,19 +1,6 @@
 import type { FlashcardCandidateDto } from "../../types";
 
 /**
- * Error thrown when the AI service is unavailable or returns an error
- */
-export class AIServiceError extends Error {
-  constructor(
-    message: string,
-    public readonly statusCode = 502
-  ) {
-    super(message);
-    this.name = "AIServiceError";
-  }
-}
-
-/**
  * Service responsible for generating flashcard candidates using an LLM
  * Currently uses a mock implementation - will be replaced with real AI service later
  */
@@ -54,10 +41,7 @@ export class FlashcardGenerationService {
         modelName: this.modelName,
       };
     } catch (error) {
-      throw new AIServiceError(
-        `Failed to generate flashcards: ${error instanceof Error ? error.message : "Unknown error"}`,
-        502
-      );
+      throw new Error(`Failed to generate flashcards: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }
 

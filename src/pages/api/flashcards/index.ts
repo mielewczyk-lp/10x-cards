@@ -2,24 +2,28 @@ import type { APIRoute } from "astro";
 import { ZodError } from "zod";
 
 import type { ErrorResponseDto } from "../../../types";
-import { CreateGenerationSourceSchema } from "../../../lib/validation/generationSourceSchemas";
-import { GenerationSourceService, AIServiceError } from "../../../lib/services/generationSourceService";
+import { CreateFlashcardsSchema } from "../../../lib/validation/flashcardSchemas";
+import {
+  FlashcardService,
+  GenerationSourceNotFoundError,
+  GenerationSourceForbiddenError,
+} from "../../../lib/services/flashcardService";
 import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 // Disable prerendering for this API route
 export const prerender = false;
 
 /**
- * POST /api/generation-sources
+ * POST /api/flashcards
  *
- * Creates a new generation source by:
- * 1. Validating the input text (1000-10000 characters)
- * 2. Creating a database record with initial stats
- * 3. Calling the AI service to generate flashcard candidates
- * 4. Updating the database record with results
- * 5. Returning the candidates to the client
+ * Creates new flashcards by:
+ * 1. Validating the request body (array of flashcard commands)
+ * 2. Verifying that any referenced generation sources exist and belong to the user
+ * 3. Bulk inserting flashcards into the database
+ * 4. Updating statistics in generation_sources table
+ * 5. Returning the created flashcards
  *
- * @returns 201 Created with candidates, or error response
+ * @returns 201 Created with flashcard DTOs, or error response
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase;
@@ -40,37 +44,50 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    const validatedData = CreateGenerationSourceSchema.parse(body);
+    const validatedData = CreateFlashcardsSchema.parse(body);
 
-    // Step 2: Create generation source using the service
-    const generationSourceService = new GenerationSourceService(supabase);
-    const response = await generationSourceService.create(validatedData.inputText, DEFAULT_USER_ID);
+    // Step 2: Create flashcards using the service
+    const flashcardService = new FlashcardService(supabase);
+    const createdFlashcards = await flashcardService.createMany(validatedData, DEFAULT_USER_ID);
 
     // Step 3: Return success response
-    return new Response(JSON.stringify(response), {
+    return new Response(JSON.stringify(createdFlashcards), {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    // Handle AI service errors
-    if (error instanceof AIServiceError) {
+    // Handle generation source not found
+    if (error instanceof GenerationSourceNotFoundError) {
       return new Response(
         JSON.stringify({
           error: {
-            message: "AI_SERVICE_UNAVAILABLE",
+            message: "NOT_FOUND",
+            fields: { generationSourceId: "GENERATION_SOURCE_NOT_FOUND" },
           },
         } satisfies ErrorResponseDto),
-        { status: 502, headers: { "Content-Type": "application/json" } }
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Handle generation source forbidden (doesn't belong to user)
+    if (error instanceof GenerationSourceForbiddenError) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "FORBIDDEN",
+            fields: { generationSourceId: "GENERATION_SOURCE_FORBIDDEN" },
+          },
+        } satisfies ErrorResponseDto),
+        { status: 403, headers: { "Content-Type": "application/json" } }
       );
     }
 
     // Handle validation errors
     if (error instanceof ZodError) {
-      const firstError = error.errors[0];
       return new Response(
         JSON.stringify({
           error: {
-            message: firstError.message || "INPUT_TEXT_INVALID",
+            message: "FIELD_VALIDATION_FAILED",
             fields: error.errors.reduce(
               (acc, err) => {
                 const path = err.path.join(".");
@@ -87,7 +104,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Handle unexpected errors
     // eslint-disable-next-line no-console
-    console.error("Unexpected error in POST /api/generation-sources:", error);
+    console.error("Unexpected error in POST /api/flashcards:", error);
     return new Response(
       JSON.stringify({
         error: {
