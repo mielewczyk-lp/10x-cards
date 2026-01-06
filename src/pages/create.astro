@@ -1,0 +1,52 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AIFlowPanel from "@/components/create-ai/AIFlowPanel";
+
+const url = new URL(Astro.request.url);
+const tab = url.searchParams.get("tab") || "ai";
+---
+
+<Layout title="Create Flashcards">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Create Flashcards</h1>
+
+    <div class="mb-6">
+      <div class="border-b border-neutral-200 dark:border-neutral-800">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <a
+            href="/create?tab=ai"
+            class={`${
+              tab === "ai"
+                ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                : "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+            } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors`}
+            aria-current={tab === "ai" ? "page" : undefined}
+          >
+            AI Generation
+          </a>
+          <a
+            href="/create?tab=manual"
+            class={`${
+              tab === "manual"
+                ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                : "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+            } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors`}
+            aria-current={tab === "manual" ? "page" : undefined}
+          >
+            Manual Entry
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    {tab === "ai" && <AIFlowPanel client:load />}
+
+    {
+      tab === "manual" && (
+        <div class="text-center py-12 text-neutral-500">
+          <p>Manual entry form coming soon...</p>
+        </div>
+      )
+    }
+  </main>
+</Layout>
