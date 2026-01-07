@@ -4,6 +4,7 @@ import { ZodError } from "zod";
 import type { ErrorResponseDto } from "../../../types";
 import { CreateGenerationSourceSchema } from "../../../lib/validation/generationSourceSchemas";
 import { GenerationSourceService, AIServiceError } from "../../../lib/services/generationSourceService";
+import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
 import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 // Disable prerendering for this API route
@@ -42,11 +43,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const validatedData = CreateGenerationSourceSchema.parse(body);
 
-    // Step 2: Create generation source using the service
-    const generationSourceService = new GenerationSourceService(supabase);
+    // Step 2: Create services
+    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "AI service configuration error",
+          },
+        } satisfies ErrorResponseDto),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const flashcardService = createFlashcardGenerationService(apiKey);
+    const generationSourceService = new GenerationSourceService(supabase, flashcardService);
+
+    // Step 3: Create generation source
     const response = await generationSourceService.create(validatedData.inputText, DEFAULT_USER_ID);
 
-    // Step 3: Return success response
+    // Step 4: Return success response
     return new Response(JSON.stringify(response), {
       status: 201,
       headers: { "Content-Type": "application/json" },

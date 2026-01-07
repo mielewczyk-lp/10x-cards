@@ -37,16 +37,24 @@ Key dependencies and tooling live in `package.json`, including `astro`, `@astroj
 1. **Prerequisites**
    - Node.js `22.14.0` (install via `nvm install 22.14.0 && nvm use 22.14.0`).
    - npm (bundled with Node 22).
-   - Supabase project credentials and OpenRouter API key (to be added to your `.env` when available).
-2. **Install dependencies**
+   - Supabase project credentials.
+   - OpenRouter API key (get it from [openrouter.ai/keys](https://openrouter.ai/keys)).
+2. **Configure environment variables**
+   Create a `.env` file in the project root with the following variables:
+   ```env
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_KEY=your-anon-key-here
+   OPENROUTER_API_KEY=your-openrouter-api-key-here
+   ```
+3. **Install dependencies**
    ```bash
    npm install
    ```
-3. **Run the development server**
+4. **Run the development server**
    ```bash
    npm run dev
    ```
-4. **Build for production**
+5. **Build for production**
    ```bash
    npm run build
    npm run preview
