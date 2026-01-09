@@ -60,6 +60,7 @@ Kryteria akceptacji:
 - Formularz rejestracji waliduje email i hasło, a po sukcesie użytkownik jest zalogowany.
 - Logowanie wymaga poprawnych danych; błędy wyświetlane są na formularzu.
 - Wylogowanie usuwa sesję z przeglądarki.
+- Formularz logowania zawiera link "Zapomniałem hasła"
 
 ID: US-002  
 Tytuł: Zarządzanie hasłem i kontem  
