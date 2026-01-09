@@ -66,16 +66,18 @@ export default function PasswordStrength({ password }: PasswordStrengthProps) {
     <div className="space-y-2 mt-2" role="status" aria-live="polite">
       <div className="flex items-center justify-between text-xs">
         <span className="text-neutral-600 dark:text-neutral-400">Password strength:</span>
-        <span className={cn("font-medium", {
-          "text-red-600 dark:text-red-500": strength.level === "weak",
-          "text-orange-600 dark:text-orange-500": strength.level === "fair",
-          "text-yellow-600 dark:text-yellow-500": strength.level === "good",
-          "text-green-600 dark:text-green-500": strength.level === "strong",
-        })}>
+        <span
+          className={cn("font-medium", {
+            "text-red-600 dark:text-red-500": strength.level === "weak",
+            "text-orange-600 dark:text-orange-500": strength.level === "fair",
+            "text-yellow-600 dark:text-yellow-500": strength.level === "good",
+            "text-green-600 dark:text-green-500": strength.level === "strong",
+          })}
+        >
           {strength.label}
         </span>
       </div>
-      
+
       <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
         <div
           className={cn("h-full transition-all duration-300 rounded-full", strength.color)}
@@ -89,15 +91,9 @@ export default function PasswordStrength({ password }: PasswordStrengthProps) {
       <div className="text-xs text-neutral-500 dark:text-neutral-400 space-y-1">
         <p>Requirements:</p>
         <ul className="list-disc list-inside space-y-0.5">
-          <li className={password.length >= 8 ? "text-green-600 dark:text-green-500" : ""}>
-            At least 8 characters
-          </li>
-          <li className={/[a-zA-Z]/.test(password) ? "text-green-600 dark:text-green-500" : ""}>
-            Contains a letter
-          </li>
-          <li className={/[0-9]/.test(password) ? "text-green-600 dark:text-green-500" : ""}>
-            Contains a number
-          </li>
+          <li className={password.length >= 8 ? "text-green-600 dark:text-green-500" : ""}>At least 8 characters</li>
+          <li className={/[a-zA-Z]/.test(password) ? "text-green-600 dark:text-green-500" : ""}>Contains a letter</li>
+          <li className={/[0-9]/.test(password) ? "text-green-600 dark:text-green-500" : ""}>Contains a number</li>
         </ul>
       </div>
     </div>

@@ -52,8 +52,8 @@ Interaktywność (walidacja, wysyłka) obsługuje React; SSR zapewnia Astro.
    a. Klik „Delete account” w `DangerZoneCard`.  
    b. Modal potwierdzenia.  
    c. Wywołanie `/api/account/delete` (patrz §2).  
-   d. Sukces → redirect do `/register` + toast.  
-  
+   d. Sukces → redirect do `/register` + toast.
+
 6. **Przypomnienie hasła / Reset**  
    a. Użytkownik klika link „Zapomniałem hasła” na `/login` → redirect `/forgot-password`.  
    b. `ForgotPasswordForm` wysyła `supabase.auth.resetPasswordForEmail(email)` (ustawiając URL `SITE_URL/reset-password`).  
@@ -66,18 +66,18 @@ Interaktywność (walidacja, wysyłka) obsługuje React; SSR zapewnia Astro.
 
 ### 1.4 Walidacja i komunikaty
 
-* Frontend: Zod z dzielonymi schematami (`src/lib/validation/authSchemas.ts`).
-* Reguły
-  * Email – zgodny z RFC 5322, wymagany.
-  * Hasło – min. 8 znaków, co najmniej 1 litera i 1 cyfra.
-  * Powtórzone hasło musi być identyczne.
-* Błędy z Supabase mapowane na przyjazne komunikaty (wzorowane na `openRouterErrors.ts`).
+- Frontend: Zod z dzielonymi schematami (`src/lib/validation/authSchemas.ts`).
+- Reguły
+  - Email – zgodny z RFC 5322, wymagany.
+  - Hasło – min. 8 znaków, co najmniej 1 litera i 1 cyfra.
+  - Powtórzone hasło musi być identyczne.
+- Błędy z Supabase mapowane na przyjazne komunikaty (wzorowane na `openRouterErrors.ts`).
 
 ### 1.5 Scenariusze edge-case
 
-* Wejście na stronę chronioną bez sesji → middleware przekierowuje do `/login`.
-* Wejście na `/login` lub `/register` przy aktywnej sesji → guard w `AuthLayout` przekierowuje do `/create`.
-* Wygaśnięcie sesji → globalny listener `supabase.auth.onAuthStateChange` wyświetla toast i przeładowuje do `/login`.
+- Wejście na stronę chronioną bez sesji → middleware przekierowuje do `/login`.
+- Wejście na `/login` lub `/register` przy aktywnej sesji → guard w `AuthLayout` przekierowuje do `/create`.
+- Wygaśnięcie sesji → globalny listener `supabase.auth.onAuthStateChange` wyświetla toast i przeładowuje do `/login`.
 
 ---
 
@@ -111,8 +111,8 @@ Błędy logujemy w `src/lib/errors`.
 
 W `src/middleware/index.ts` rozszerzamy:
 
-* `isProtected(path)` – brak sesji i ścieżka do `/create`, `/account`, wybranych `/api` → redirect `/login`.
-* `isPublicAuth(path)` – aktywna sesja i ścieżka `/login` lub `/register` → redirect `/create`.
+- `isProtected(path)` – brak sesji i ścieżka do `/create`, `/account`, wybranych `/api` → redirect `/login`.
+- `isPublicAuth(path)` – aktywna sesja i ścieżka `/login` lub `/register` → redirect `/create`.
 
 Implementacja korzysta z `getSupabaseServerClient(Astro)` zgodnie z istniejącym wzorcem.
 
@@ -122,9 +122,9 @@ Implementacja korzysta z `getSupabaseServerClient(Astro)` zgodnie z istniejącym
 
 ### 3.1 Kluczowe elementy
 
-1. Klient przeglądarkowy – `src/lib/supabase.browser.ts`, singleton `createClient(anonKey, url)`.  
-2. Klient serwerowy – `src/lib/supabase.server.ts` z cookies (`Astro.request.headers`).  
-3. Provider React – `AuthProvider.tsx` (Context) dostarczający `session`, `user`, `signIn`, `signUp`, `signOut`.  
+1. Klient przeglądarkowy – `src/lib/supabase.browser.ts`, singleton `createClient(anonKey, url)`.
+2. Klient serwerowy – `src/lib/supabase.server.ts` z cookies (`Astro.request.headers`).
+3. Provider React – `AuthProvider.tsx` (Context) dostarczający `session`, `user`, `signIn`, `signUp`, `signOut`.
 4. Hook – `useAuth()`.
 
 ### 3.2 Przechowywanie sesji
@@ -142,17 +142,17 @@ Brak – Supabase tworzy tabelę `auth.users`; istniejące tabele `flashcards` i
 
 ### 3.5 Bezpieczeństwo
 
-* CSRF – zabezpieczenie przez SameSite Cookies.  
-* Hasła – bezpiecznie przechowywane przez Supabase (bcrypt).  
-* Limity prób logowania – domyślne rate-limity Supabase; UI wyświetla komunikat „Too many attempts”.
+- CSRF – zabezpieczenie przez SameSite Cookies.
+- Hasła – bezpiecznie przechowywane przez Supabase (bcrypt).
+- Limity prób logowania – domyślne rate-limity Supabase; UI wyświetla komunikat „Too many attempts”.
 
 ---
 
 ## 4. WYMAGANIA IMPLEMENTACYJNE
 
-1. Wszystkie pliki zgodne ze strukturą katalogów (patrz Shared Rules).  
-2. Komponenty React w Typescript.  
-3. Walidacja – Zod w `src/lib/validation/authSchemas.ts`.  
+1. Wszystkie pliki zgodne ze strukturą katalogów (patrz Shared Rules).
+2. Komponenty React w Typescript.
+3. Walidacja – Zod w `src/lib/validation/authSchemas.ts`.
 
 ---
 
