@@ -7,7 +7,7 @@ import type {
   GenerationSourceInsert,
   GenerationSourceUpdate,
 } from "../../types";
-import { flashcardGenerationService } from "./flashcardGenerationService";
+import type { FlashcardGenerationService } from "./flashcardGenerationService";
 
 /**
  * Error thrown when the AI service is unavailable or returns an error
@@ -26,7 +26,10 @@ export class AIServiceError extends Error {
  * Service responsible for managing generation sources
  */
 export class GenerationSourceService {
-  constructor(private supabase: SupabaseClient) {}
+  constructor(
+    private supabase: SupabaseClient,
+    private flashcardGenerationService: FlashcardGenerationService
+  ) {}
 
   /**
    * Create a new generation source and generate flashcard candidates
@@ -69,7 +72,7 @@ export class GenerationSourceService {
     let modelName: string;
 
     try {
-      const result = await flashcardGenerationService.generate(inputText);
+      const result = await this.flashcardGenerationService.generate(inputText);
       candidates = result.candidates;
       modelName = result.modelName;
     } catch (error) {
