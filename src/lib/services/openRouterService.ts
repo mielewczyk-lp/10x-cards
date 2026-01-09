@@ -108,8 +108,6 @@ Generate between 5-15 flashcards depending on the content length and complexity.
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiKey}`,
-          "HTTP-Referer": "https://10x-cards.app", // Optional: for OpenRouter analytics
-          "X-Title": "10x Cards", // Optional: for OpenRouter analytics
         },
         body: JSON.stringify(request),
         signal: controller.signal,
