@@ -2,9 +2,9 @@ import { defineMiddleware } from "astro:middleware";
 
 import { createSupabaseServerInstance } from "../db/supabase.client";
 
-// Public paths - Auth pages and API endpoints
+// Public paths - Auth pages and API endpoints that don't require authentication
 const PUBLIC_PATHS = [
-  // Server-Rendered Astro Pages
+  // Auth pages
   "/login",
   "/register",
   "/forgot-password",
@@ -13,8 +13,12 @@ const PUBLIC_PATHS = [
   "/api/auth/login",
   "/api/auth/register",
   "/api/auth/logout",
+  "/api/auth/forgot-password",
   "/api/auth/reset-password",
 ];
+
+// Paths that should redirect to /create if user is already logged in
+const AUTH_ONLY_PATHS = ["/login", "/register", "/forgot-password"];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
   // Create Supabase server instance for this request
@@ -36,6 +40,11 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
       email: user.email,
       id: user.id,
     };
+  }
+
+  // If user is logged in and tries to access auth-only pages, redirect to /create
+  if (user && AUTH_ONLY_PATHS.includes(url.pathname)) {
+    return redirect("/create");
   }
 
   // Public paths can be accessed without auth check

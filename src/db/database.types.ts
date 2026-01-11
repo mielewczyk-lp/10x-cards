@@ -108,7 +108,12 @@ export interface Database {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      delete_current_user: {
+        Args: Record<never, never>;
+        Returns: void;
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };

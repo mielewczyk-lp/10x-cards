@@ -27,11 +27,11 @@ export function EditCandidateModal({ isOpen, onClose, candidate, onSave }: EditC
   // Initialize form with candidate data
   useEffect(() => {
     if (isOpen) {
-      setFront(candidate.front);
-      setBack(candidate.back);
+      setFront(candidate.front || "");
+      setBack(candidate.back || "");
       setErrors({});
     }
-  }, [isOpen, candidate]);
+  }, [isOpen, candidate.front, candidate.back]);
 
   const validate = useCallback(() => {
     const newErrors: { front?: string; back?: string } = {};

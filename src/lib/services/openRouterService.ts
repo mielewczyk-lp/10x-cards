@@ -50,7 +50,11 @@ Your task is to analyze the provided text and generate effective flashcards that
 - Avoid redundancy between flashcards
 - Cover the material comprehensively
 
-Generate between 5-15 flashcards depending on the content length and complexity.`;
+Generate between 5-15 flashcards depending on the content length and complexity.
+
+Each flashcard must have:
+- "front": The question or prompt (max 200 characters)
+- "back": The answer or explanation (max 500 characters)`;
 
   private readonly apiKey: string;
   private readonly baseUrl: string;

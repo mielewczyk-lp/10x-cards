@@ -15,7 +15,7 @@ export interface FlashcardGenerationConfig {
  * Default configuration for flashcard generation
  */
 const DEFAULT_CONFIG: FlashcardGenerationConfig = {
-  model: "",
+  model: "xiaomi/mimo-v2-flash:free",
   temperature: 0.7,
   maxTokens: 2048,
 };

@@ -24,35 +24,55 @@ export default function ForgotPasswordForm() {
     try {
       // Validate input using Zod
       const formData: ForgotPasswordInput = { email };
-      const validatedData = ForgotPasswordSchema.parse(formData);
+      const validationResult = ForgotPasswordSchema.safeParse(formData);
 
-      // TODO: Implement Supabase password reset
-      // supabase.auth.resetPasswordForEmail(validatedData.email, {
-      //   redirectTo: `${window.location.origin}/reset-password`
-      // })
-      console.log("Password reset request for:", validatedData.email);
-
-      // Placeholder for actual implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Success
-      setSuccess(true);
-      setEmail("");
-    } catch (err) {
-      if (err && typeof err === "object" && "errors" in err) {
-        // Zod validation error
-        const zodError = err as { errors: { path: string[]; message: string }[] };
+      if (!validationResult.success) {
         const errors: Record<string, string> = {};
-
-        zodError.errors.forEach((error) => {
+        validationResult.error.errors.forEach((error) => {
           const field = error.path[0] as string;
           const message = getAuthErrorMessage(error.message);
           errors[field] = message;
         });
-
         setFieldErrors(errors);
+        return;
       }
+
+      // Call API endpoint
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validationResult.data),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle API errors
+        if (data.error === "VALIDATION_ERROR" && data.details) {
+          // Server-side validation errors
+          const errors: Record<string, string> = {};
+          data.details.forEach((error: { path: string[]; message: string }) => {
+            const field = error.path[0] as string;
+            const message = getAuthErrorMessage(error.message);
+            errors[field] = message;
+          });
+          setFieldErrors(errors);
+        } else {
+          // Other errors
+          const errorMessage = getAuthErrorMessage(data.error);
+          setFieldErrors({ email: errorMessage });
+        }
+        return;
+      }
+
+      // Success - always show success message for security reasons
+      // (don't reveal if email exists in database)
+      setSuccess(true);
+    } catch (err) {
       console.error("Forgot password error:", err);
+      setFieldErrors({ email: "An unexpected error occurred. Please try again." });
     } finally {
       setIsLoading(false);
     }

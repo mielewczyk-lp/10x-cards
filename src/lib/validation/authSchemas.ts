@@ -147,7 +147,7 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   CONFIRM_NEW_PASSWORD_REQUIRED: "Please confirm your new password",
   CONFIRM_NEW_PASSWORD_INVALID: "Invalid new password confirmation",
 
-  // Supabase auth errors (examples - to be extended)
+  // Supabase auth errors
   INVALID_CREDENTIALS: "Invalid email or password",
   USER_ALREADY_EXISTS: "An account with this email already exists",
   TOO_MANY_REQUESTS: "Too many attempts. Please try again later",
@@ -156,6 +156,16 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   EMAIL_NOT_FOUND: "No account found with this email address",
   INVALID_TOKEN: "This reset link is invalid or has expired",
   TOKEN_EXPIRED: "This reset link has expired. Please request a new one",
+
+  // Password change/reset errors
+  CURRENT_PASSWORD_INCORRECT: "Current password is incorrect",
+  PASSWORD_SAME_AS_OLD: "New password must be different from your current password",
+  PASSWORD_UPDATE_FAILED: "Failed to update password. Please try again",
+  RESET_EMAIL_FAILED: "Failed to send reset email. Please try again",
+  PASSWORD_RESET_FAILED: "Failed to reset password. Please try again",
+  INVALID_OR_EXPIRED_TOKEN: "This reset link is invalid or has expired. Please request a new one",
+  SESSION_EXPIRED: "Your session has expired. Please log in again",
+  UNAUTHORIZED: "You must be logged in to perform this action",
 
   // API errors
   VALIDATION_ERROR: "Please check your input and try again",
