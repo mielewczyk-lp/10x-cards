@@ -1,0 +1,28 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ChangePasswordForm from "@/components/auth/ChangePasswordForm";
+import DangerZoneCard from "@/components/auth/DangerZoneCard";
+---
+
+<Layout title="Account Settings - 10x Cards">
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100">Account Settings</h1>
+        <p class="text-neutral-600 dark:text-neutral-400">Manage your account security and preferences</p>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Change Password Section -->
+        <section aria-labelledby="password-heading">
+          <ChangePasswordForm client:load />
+        </section>
+
+        <!-- Danger Zone Section -->
+        <section aria-labelledby="danger-heading">
+          <DangerZoneCard client:load />
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>

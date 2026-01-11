@@ -1,0 +1,24 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import AuthForm from "@/components/auth/AuthForm";
+---
+
+<AuthLayout title="Register - 10x Cards">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100">Create an account</h1>
+    <p class="text-neutral-600 dark:text-neutral-400">Get started with 10x Cards today</p>
+  </div>
+
+  <AuthForm client:load mode="register" />
+
+  <div class="mt-6 text-center text-sm">
+    <span class="text-neutral-600 dark:text-neutral-400">Already have an account?</span>
+    {" "}
+    <a
+      href="/login"
+      class="font-medium text-neutral-900 hover:text-neutral-700 dark:text-neutral-100 dark:hover:text-neutral-300 transition-colors"
+    >
+      Sign in
+    </a>
+  </div>
+</AuthLayout>

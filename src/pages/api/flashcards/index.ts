@@ -8,7 +8,6 @@ import {
   GenerationSourceNotFoundError,
   GenerationSourceForbiddenError,
 } from "../../../lib/services/flashcardService";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -27,6 +26,19 @@ export const prerender = false;
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase;
+  const user = locals.user;
+
+  // Ensure user is authenticated
+  if (!user) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "UNAUTHORIZED",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
   try {
     // Step 1: Parse and validate request body
@@ -48,7 +60,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Step 2: Create flashcards using the service
     const flashcardService = new FlashcardService(supabase);
-    const createdFlashcards = await flashcardService.createMany(validatedData, DEFAULT_USER_ID);
+    const createdFlashcards = await flashcardService.createMany(validatedData, user.id);
 
     // Step 3: Return success response
     return new Response(JSON.stringify(createdFlashcards), {

@@ -5,7 +5,6 @@ import type { ErrorResponseDto } from "../../../types";
 import { CreateGenerationSourceSchema } from "../../../lib/validation/generationSourceSchemas";
 import { GenerationSourceService, AIServiceError } from "../../../lib/services/generationSourceService";
 import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -24,6 +23,19 @@ export const prerender = false;
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase;
+  const user = locals.user;
+
+  // Ensure user is authenticated
+  if (!user) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "UNAUTHORIZED",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
   try {
     // Step 1: Parse and validate request body
@@ -60,7 +72,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const generationSourceService = new GenerationSourceService(supabase, flashcardService);
 
     // Step 3: Create generation source
-    const response = await generationSourceService.create(validatedData.inputText, DEFAULT_USER_ID);
+    const response = await generationSourceService.create(validatedData.inputText, user.id);
 
     // Step 4: Return success response
     return new Response(JSON.stringify(response), {
