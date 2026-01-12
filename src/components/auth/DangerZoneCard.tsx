@@ -22,15 +22,21 @@ export default function DangerZoneCard() {
     setIsDeleting(true);
 
     try {
-      // TODO: Implement account deletion via API
-      console.log("Account deletion attempt");
+      // Call the account deletion API
+      const response = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      // Placeholder for actual implementation
-      // This should call: POST /api/account/delete
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to delete account. Please try again.");
+      }
 
-      // On success, redirect to register page
-      window.location.href = "/register";
+      // On success, redirect to register page with a message
+      window.location.href = "/register?deleted=true";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete account. Please try again.");
       setIsDeleting(false);
@@ -65,13 +71,13 @@ export default function DangerZoneCard() {
                 <DialogHeader>
                   <DialogTitle>Are you absolutely sure?</DialogTitle>
                   <DialogDescription className="space-y-2">
-                    <p>
+                    <span className="display-block">
                       This action cannot be undone. This will permanently delete your account and remove all your data
                       from our servers.
-                    </p>
-                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                    </span>
+                    <span className="display-blockfont-medium text-neutral-900 dark:text-neutral-100">
                       All of your flashcards and learning progress will be permanently lost.
-                    </p>
+                    </span>
                   </DialogDescription>
                 </DialogHeader>
 

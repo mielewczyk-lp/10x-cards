@@ -1,6 +1,15 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import AuthForm from "@/components/auth/AuthForm";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+export const prerender = false;
+
+// Guard handled by middleware
+
+// Check for success messages from query params
+const url = new URL(Astro.request.url);
+const accountDeleted = url.searchParams.get("deleted") === "true";
 ---
 
 <AuthLayout title="Register - 10x Cards">
@@ -8,6 +17,18 @@ import AuthForm from "@/components/auth/AuthForm";
     <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100">Create an account</h1>
     <p class="text-neutral-600 dark:text-neutral-400">Get started with 10x Cards today</p>
   </div>
+
+  {
+    accountDeleted && (
+      <div class="mb-6">
+        <Alert>
+          <AlertDescription class="text-green-600 dark:text-green-500">
+            Your account has been successfully deleted. You can create a new account if you wish.
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
 
   <AuthForm client:load mode="register" />
 

@@ -1,14 +1,15 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import AuthForm from "@/components/auth/AuthForm";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const prerender = false;
 
-// If user is already logged in, redirect to create page
-const user = Astro.locals.user;
-if (user) {
-  return Astro.redirect("/create");
-}
+// Guard handled by middleware
+
+// Check for success messages from query params
+const url = new URL(Astro.request.url);
+const resetSuccess = url.searchParams.get("reset") === "success";
 ---
 
 <AuthLayout title="Login - 10x Cards">
@@ -16,6 +17,18 @@ if (user) {
     <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100">Welcome back</h1>
     <p class="text-neutral-600 dark:text-neutral-400">Sign in to your account to continue</p>
   </div>
+
+  {
+    resetSuccess && (
+      <div class="mb-6">
+        <Alert>
+          <AlertDescription class="text-green-600 dark:text-green-500">
+            Password reset successful! You can now sign in with your new password.
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
 
   <AuthForm client:load mode="login" />
 

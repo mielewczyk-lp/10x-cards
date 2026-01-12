@@ -34,13 +34,52 @@ export default function ChangePasswordForm() {
         confirmNewPassword,
       };
 
-      const validatedData = ChangePasswordSchema.parse(formData);
+      const validationResult = ChangePasswordSchema.safeParse(formData);
 
-      // TODO: Implement Supabase password update
-      console.log("Password change attempt");
+      if (!validationResult.success) {
+        const errors: Record<string, string> = {};
+        validationResult.error.errors.forEach((error) => {
+          const field = error.path[0] as string;
+          const message = getAuthErrorMessage(error.message);
+          errors[field] = message;
+        });
+        setFieldErrors(errors);
+        return;
+      }
 
-      // Placeholder for actual implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call API endpoint
+      const response = await fetch("/api/account/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validationResult.data),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle API errors
+        if (data.error === "VALIDATION_ERROR" && data.details) {
+          // Server-side validation errors
+          const errors: Record<string, string> = {};
+          data.details.forEach((error: { path: string[]; message: string }) => {
+            const field = error.path[0] as string;
+            const message = getAuthErrorMessage(error.message);
+            errors[field] = message;
+          });
+          setFieldErrors(errors);
+        } else if (data.error === "CURRENT_PASSWORD_INCORRECT") {
+          setFieldErrors({ currentPassword: getAuthErrorMessage(data.error) });
+        } else if (data.error === "SESSION_EXPIRED" || data.error === "UNAUTHORIZED") {
+          setFieldErrors({ currentPassword: getAuthErrorMessage(data.error) });
+        } else {
+          // Other errors
+          const errorMessage = getAuthErrorMessage(data.error);
+          setFieldErrors({ newPassword: errorMessage });
+        }
+        return;
+      }
 
       // Success
       setSuccess("Password updated successfully");
@@ -48,20 +87,10 @@ export default function ChangePasswordForm() {
       setNewPassword("");
       setConfirmNewPassword("");
     } catch (err) {
-      if (err && typeof err === "object" && "errors" in err) {
-        // Zod validation error
-        const zodError = err as { errors: { path: string[]; message: string }[] };
-        const errors: Record<string, string> = {};
-
-        zodError.errors.forEach((error) => {
-          const field = error.path[0] as string;
-          const message = getAuthErrorMessage(error.message);
-          errors[field] = message;
-        });
-
-        setFieldErrors(errors);
-      }
       console.error("Password change error:", err);
+      setFieldErrors({
+        currentPassword: "An unexpected error occurred. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
