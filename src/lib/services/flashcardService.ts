@@ -1,5 +1,14 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { CreateFlashcardCommand, FlashcardDto, FlashcardInsert, GenerationSourceUpdate } from "../../types";
+import type {
+  CreateFlashcardCommand,
+  FlashcardDto,
+  FlashcardInsert,
+  FlashcardUpdate,
+  GenerationSourceUpdate,
+  ListFlashcardsQuery,
+  PaginatedFlashcardsDto,
+  UpdateFlashcardCommand,
+} from "../../types";
 
 /**
  * Error thrown when a generation source is not found
@@ -18,6 +27,26 @@ export class GenerationSourceForbiddenError extends Error {
   constructor(id: string) {
     super(`Generation source with id ${id} does not belong to the user`);
     this.name = "GenerationSourceForbiddenError";
+  }
+}
+
+/**
+ * Error thrown when a flashcard is not found
+ */
+export class FlashcardNotFoundError extends Error {
+  constructor(id: string) {
+    super(`Flashcard with id ${id} not found`);
+    this.name = "FlashcardNotFoundError";
+  }
+}
+
+/**
+ * Error thrown when a flashcard doesn't belong to the user
+ */
+export class FlashcardForbiddenError extends Error {
+  constructor(id: string) {
+    super(`Flashcard with id ${id} does not belong to the user`);
+    this.name = "FlashcardForbiddenError";
   }
 }
 
@@ -174,5 +203,188 @@ export class FlashcardService {
 
     // Execute all updates in parallel
     await Promise.all(updatePromises);
+  }
+
+  /**
+   * Get paginated list of flashcards with optional search and sorting
+   *
+   * @param query - List query parameters (search, pagination, sorting)
+   * @param userId - ID of the user fetching flashcards
+   * @returns Paginated flashcards response
+   */
+  async list(query: ListFlashcardsQuery, userId: string): Promise<PaginatedFlashcardsDto> {
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 20;
+    const sort = query.sort ?? "created_at";
+    const order = query.order ?? "desc";
+    const searchQuery = query.q?.trim();
+
+    // Calculate offset
+    const offset = (page - 1) * pageSize;
+
+    // Build base query
+    let dbQuery = this.supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", userId);
+
+    // Apply full-text search if provided
+    if (searchQuery) {
+      // Use Postgres full-text search on search_vector column
+      dbQuery = dbQuery.textSearch("search_vector", searchQuery, {
+        type: "websearch",
+        config: "english",
+      });
+    }
+
+    // Apply sorting
+    dbQuery = dbQuery.order(sort, { ascending: order === "asc" });
+
+    // Apply pagination
+    dbQuery = dbQuery.range(offset, offset + pageSize - 1);
+
+    // Execute query
+    const { data: flashcards, error, count } = await dbQuery;
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch flashcards:", error);
+      throw new Error("Failed to fetch flashcards");
+    }
+
+    // Calculate total pages
+    const totalItems = count ?? 0;
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    // Map to DTOs
+    const items: FlashcardDto[] = (flashcards ?? []).map((flashcard) => ({
+      id: flashcard.id,
+      front: flashcard.front,
+      back: flashcard.back,
+      sourceType: flashcard.source_type as FlashcardDto["sourceType"],
+      generationSourceId: flashcard.generation_source_id,
+      createdAt: flashcard.created_at,
+      updatedAt: flashcard.updated_at,
+    }));
+
+    return {
+      items,
+      page,
+      pageSize,
+      totalItems,
+      totalPages,
+    };
+  }
+
+  /**
+   * Get a single flashcard by ID
+   *
+   * @param id - Flashcard ID
+   * @param userId - ID of the user fetching the flashcard
+   * @returns Flashcard DTO
+   * @throws FlashcardNotFoundError if flashcard doesn't exist
+   * @throws FlashcardForbiddenError if flashcard doesn't belong to user
+   */
+  async getById(id: string, userId: string): Promise<FlashcardDto> {
+    const { data: flashcard, error } = await this.supabase.from("flashcards").select("*").eq("id", id).maybeSingle();
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to fetch flashcard ${id}:`, error);
+      throw new Error("Failed to fetch flashcard");
+    }
+
+    if (!flashcard) {
+      throw new FlashcardNotFoundError(id);
+    }
+
+    if (flashcard.user_id !== userId) {
+      throw new FlashcardForbiddenError(id);
+    }
+
+    return {
+      id: flashcard.id,
+      front: flashcard.front,
+      back: flashcard.back,
+      sourceType: flashcard.source_type as FlashcardDto["sourceType"],
+      generationSourceId: flashcard.generation_source_id,
+      createdAt: flashcard.created_at,
+      updatedAt: flashcard.updated_at,
+    };
+  }
+
+  /**
+   * Update a flashcard
+   *
+   * @param id - Flashcard ID
+   * @param command - Update command with fields to change
+   * @param userId - ID of the user updating the flashcard
+   * @returns Updated flashcard DTO
+   * @throws FlashcardNotFoundError if flashcard doesn't exist
+   * @throws FlashcardForbiddenError if flashcard doesn't belong to user
+   */
+  async update(id: string, command: UpdateFlashcardCommand, userId: string): Promise<FlashcardDto> {
+    // First, verify ownership and get current flashcard
+    const currentFlashcard = await this.getById(id, userId);
+
+    // Prepare update data
+    const updateData: FlashcardUpdate = {};
+
+    if (command.front !== undefined) {
+      updateData.front = command.front;
+    }
+
+    if (command.back !== undefined) {
+      updateData.back = command.back;
+    }
+
+    // If the flashcard was AI-generated and is being edited, change source_type to 'ai-edited'
+    if (currentFlashcard.sourceType === "ai-full" && Object.keys(updateData).length > 0) {
+      updateData.source_type = "ai-edited";
+    }
+
+    // Execute update
+    const { data: updatedFlashcard, error } = await this.supabase
+      .from("flashcards")
+      .update(updateData)
+      .eq("id", id)
+      .eq("user_id", userId)
+      .select()
+      .single();
+
+    if (error || !updatedFlashcard) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to update flashcard ${id}:`, error);
+      throw new Error("Failed to update flashcard");
+    }
+
+    return {
+      id: updatedFlashcard.id,
+      front: updatedFlashcard.front,
+      back: updatedFlashcard.back,
+      sourceType: updatedFlashcard.source_type as FlashcardDto["sourceType"],
+      generationSourceId: updatedFlashcard.generation_source_id,
+      createdAt: updatedFlashcard.created_at,
+      updatedAt: updatedFlashcard.updated_at,
+    };
+  }
+
+  /**
+   * Delete a flashcard
+   *
+   * @param id - Flashcard ID
+   * @param userId - ID of the user deleting the flashcard
+   * @throws FlashcardNotFoundError if flashcard doesn't exist
+   * @throws FlashcardForbiddenError if flashcard doesn't belong to user
+   */
+  async delete(id: string, userId: string): Promise<void> {
+    // First, verify ownership
+    await this.getById(id, userId);
+
+    // Execute delete
+    const { error } = await this.supabase.from("flashcards").delete().eq("id", id).eq("user_id", userId);
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to delete flashcard ${id}:`, error);
+      throw new Error("Failed to delete flashcard");
+    }
   }
 }
