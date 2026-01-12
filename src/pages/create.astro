@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import AIFlowPanel from "@/components/create-ai/AIFlowPanel";
+import ManualFlashcardForm from "@/components/create-ai/ManualFlashcardForm";
 
 export const prerender = false;
 
@@ -46,12 +47,6 @@ const tab = url.searchParams.get("tab") || "ai";
 
     {tab === "ai" && <AIFlowPanel client:load />}
 
-    {
-      tab === "manual" && (
-        <div class="text-center py-12 text-neutral-500">
-          <p>Manual entry form coming soon...</p>
-        </div>
-      )
-    }
+    {tab === "manual" && <ManualFlashcardForm client:load />}
   </main>
 </Layout>
