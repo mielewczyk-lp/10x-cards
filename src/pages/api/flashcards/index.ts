@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { ZodError } from "zod";
 
 import type { ErrorResponseDto } from "../../../types";
-import { CreateFlashcardsSchema } from "../../../lib/validation/flashcardSchemas";
+import { CreateFlashcardsSchema, ListFlashcardsQuerySchema } from "../../../lib/validation/flashcardSchemas";
 import {
   FlashcardService,
   GenerationSourceNotFoundError,
@@ -11,6 +11,88 @@ import {
 
 // Disable prerendering for this API route
 export const prerender = false;
+
+/**
+ * GET /api/flashcards
+ *
+ * Retrieves paginated list of flashcards with optional search and sorting:
+ * 1. Validates query parameters
+ * 2. Fetches flashcards from database with filters
+ * 3. Returns paginated response
+ *
+ * @returns 200 OK with paginated flashcards, or error response
+ */
+export const GET: APIRoute = async ({ url, locals }) => {
+  const supabase = locals.supabase;
+  const user = locals.user;
+
+  // Ensure user is authenticated
+  if (!user) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "UNAUTHORIZED",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  try {
+    // Step 1: Parse and validate query parameters
+    const queryParams = {
+      q: url.searchParams.get("q") || undefined,
+      page: url.searchParams.get("page") || undefined,
+      pageSize: url.searchParams.get("pageSize") || undefined,
+      sort: url.searchParams.get("sort") || undefined,
+      order: url.searchParams.get("order") || undefined,
+    };
+
+    const validatedQuery = ListFlashcardsQuerySchema.parse(queryParams);
+
+    // Step 2: Fetch flashcards using the service
+    const flashcardService = new FlashcardService(supabase);
+    const paginatedFlashcards = await flashcardService.list(validatedQuery, user.id);
+
+    // Step 3: Return success response
+    return new Response(JSON.stringify(paginatedFlashcards), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    // Handle validation errors
+    if (error instanceof ZodError) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "FIELD_VALIDATION_FAILED",
+            fields: error.errors.reduce(
+              (acc, err) => {
+                const path = err.path.join(".");
+                acc[path] = err.message;
+                return acc;
+              },
+              {} as Record<string, string>
+            ),
+          },
+        } satisfies ErrorResponseDto),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Handle unexpected errors
+    // eslint-disable-next-line no-console
+    console.error("Unexpected error in GET /api/flashcards:", error);
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "INTERNAL_SERVER_ERROR",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
 
 /**
  * POST /api/flashcards
