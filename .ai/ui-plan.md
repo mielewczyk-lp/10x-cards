@@ -7,7 +7,7 @@ Aplikacja 10x Cards składa się z pojedynczej aplikacji React osadzonej w Astro
 1. wygenerować kandydatów fiszek z użyciem AI (domyślna zakładka),
 2. dodać pojedynczą fiszkę manualnie (druga zakładka lub modal).
 
-Pozostałe kluczowe widoki to lista zaakceptowanych fiszek, opcjonalny ekran sesji powtórek, ustawienia konta oraz formularze auth. Nawigacja realizowana jest poprzez top-bar (desktop) / hamburger (mobile) i wykorzystuje standardowy router kliencki. Komponenty modal/toast renderują się w portalu `#__portal`. Całość spełnia WCAG AA, obsługuje dark mode i zabezpiecza trasy guardami Supabase Auth.
+Pozostałe kluczowe widoki to lista zaakceptowanych fiszek, opcjonalny ekran sesji powtórek, ustawienia konta, statystyki oraz formularze auth. Nawigacja realizowana jest poprzez top-bar (desktop) / hamburger (mobile) i wykorzystuje standardowy router kliencki. Komponenty modal/toast renderują się w portalu `#__portal`. Całość spełnia WCAG AA, obsługuje dark mode i zabezpiecza trasy guardami Supabase Auth.
 
 ## 2. Lista widoków
 
@@ -74,6 +74,14 @@ Pozostałe kluczowe widoki to lista zaakceptowanych fiszek, opcjonalny ekran ses
 **Kluczowe informacje:** Formularz zmiany hasła, przycisk „Delete account”  
 **Kluczowe komponenty:** `PasswordForm`, `DangerZone`  
 **UX / A11y / Bezpieczeństwo:** Potwierdzenia krytycznych akcji, mail potwierdzający, signOut + redirect
+
+### Statistics
+
+**Ścieżka URL:** `/stats`  
+**Główny cel:** Wyświetlenie statystyk KPI użytkownika  
+**Kluczowe informacje:** AI acceptance rate (%), AI flashcard share (%), breakdown z liczbami, wskaźnik osiągnięcia celu 75%  
+**Kluczowe komponenty:** `StatsPanel`, `Card`  
+**UX / A11y / Bezpieczeństwo:** Tylko dla zalogowanych, dane filtrowane przez auth.uid(), loading state, obsługa błędów
 
 ### Not Found
 

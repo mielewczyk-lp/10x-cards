@@ -21,3 +21,18 @@ export const CreateGenerationSourceSchema = z.object({
  * Type inference from the schema
  */
 export type CreateGenerationSourceInput = z.infer<typeof CreateGenerationSourceSchema>;
+
+/**
+ * Validation schema for PATCH /generation-sources/:id
+ * Updates telemetry statistics after user review of candidates
+ */
+export const UpdateGenerationSourceSchema = z.object({
+  totalAccepted: z.number().int().min(0).optional(),
+  totalAcceptedEdited: z.number().int().min(0).optional(),
+  totalRejected: z.number().int().min(0).optional(),
+});
+
+/**
+ * Type inference from the schema
+ */
+export type UpdateGenerationSourceInput = z.infer<typeof UpdateGenerationSourceSchema>;

@@ -68,7 +68,12 @@ export default function AIFlowPanel() {
 
           <CandidateList candidates={candidates} onUpdateCandidate={updateCandidate} />
 
-          <BulkSaveButton disabled={!hasAcceptedCandidates || loadingSave} loading={loadingSave} onClick={handleSave} />
+          <BulkSaveButton
+            disabled={!hasAcceptedCandidates || loadingSave}
+            loading={loadingSave}
+            onClick={handleSave}
+            pendingCount={stats.pending}
+          />
         </div>
       )}
     </div>

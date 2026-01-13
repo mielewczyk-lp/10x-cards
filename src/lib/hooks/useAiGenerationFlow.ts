@@ -225,12 +225,13 @@ export function useAiGenerationFlow() {
 
       const savedFlashcards: FlashcardDto[] = await response.json();
 
-      // Optional: Update generation source stats
+      // Update generation source stats
+      // IMPORTANT: pending candidates are counted as rejected
       if (state.generationSourceId) {
         const updateCommand: UpdateGenerationSourceCommand = {
           totalAccepted: stats.accepted,
           totalAcceptedEdited: stats.edited,
-          totalRejected: stats.rejected,
+          totalRejected: stats.rejected + stats.pending, // pending = implicitly rejected
         };
 
         await fetch(`/api/generation-sources/${state.generationSourceId}`, {
