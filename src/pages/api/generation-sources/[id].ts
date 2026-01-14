@@ -149,3 +149,105 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     );
   }
 };
+
+/**
+ * DELETE /api/generation-sources/:id
+ *
+ * Deletes a generation source (typically used for removing error logs):
+ * 1. Verifies ownership
+ * 2. Deletes the generation source from database
+ * 3. Returns success response
+ *
+ * @returns 204 No Content on success, or error response
+ */
+export const DELETE: APIRoute = async ({ params, locals }) => {
+  const supabase = locals.supabase;
+  const user = locals.user;
+
+  // Ensure user is authenticated
+  if (!user) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "UNAUTHORIZED",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Validate ID parameter
+  const { id } = params;
+  if (!id) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "INVALID_ID",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  try {
+    // Create service (FlashcardGenerationService not needed for delete, but constructor requires it)
+    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "AI service configuration error",
+          },
+        } satisfies ErrorResponseDto),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const flashcardService = createFlashcardGenerationService(apiKey);
+    const generationSourceService = new GenerationSourceService(supabase, flashcardService);
+
+    // Delete generation source using the service
+    await generationSourceService.delete(id, user.id);
+
+    // Return success response with no content
+    return new Response(null, {
+      status: 204,
+    });
+  } catch (error) {
+    // Handle generation source not found
+    if (error instanceof GenerationSourceNotFoundError) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "NOT_FOUND",
+          },
+        } satisfies ErrorResponseDto),
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Handle generation source forbidden (doesn't belong to user)
+    if (error instanceof GenerationSourceForbiddenError) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "FORBIDDEN",
+          },
+        } satisfies ErrorResponseDto),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Handle unexpected errors
+    // eslint-disable-next-line no-console
+    console.error("Unexpected error in DELETE /api/generation-sources/:id:", error);
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "INTERNAL_SERVER_ERROR",
+        },
+      } satisfies ErrorResponseDto),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};

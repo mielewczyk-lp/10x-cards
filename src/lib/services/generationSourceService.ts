@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import type { SupabaseClient } from "../../db/supabase.client";
 import type {
   CreateGenerationSourceResponseDto,
+  ErrorLogDto,
   FlashcardCandidateDto,
   GenerationSourceInsert,
   GenerationSourceUpdate,
@@ -195,6 +196,79 @@ export class GenerationSourceService {
       // eslint-disable-next-line no-console
       console.error(`Failed to update generation source ${id}:`, updateError);
       throw new Error("Failed to update generation source statistics");
+    }
+  }
+
+  /**
+   * List all generation sources with errors (error_message IS NOT NULL)
+   *
+   * @param userId - ID of the user
+   * @returns Array of error logs
+   */
+  async listErrors(userId: string): Promise<ErrorLogDto[]> {
+    // Fetch all error logs for the user
+    const { data: errorLogs, error: fetchError } = await this.supabase
+      .from("generation_sources")
+      .select("id, error_message, created_at")
+      .eq("user_id", userId)
+      .not("error_message", "is", null)
+      .order("created_at", { ascending: false });
+
+    if (fetchError) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch error logs:", fetchError);
+      throw new Error("Failed to fetch error logs");
+    }
+
+    // Map to DTOs (happy path)
+    return (errorLogs ?? []).map((log) => ({
+      id: log.id,
+      errorMessage: log.error_message ?? "",
+      createdAt: log.created_at,
+    }));
+  }
+
+  /**
+   * Delete a generation source
+   *
+   * @param id - ID of the generation source to delete
+   * @param userId - ID of the user
+   * @throws GenerationSourceNotFoundError if generation source doesn't exist
+   * @throws GenerationSourceForbiddenError if generation source doesn't belong to user
+   */
+  async delete(id: string, userId: string): Promise<void> {
+    // Step 1: Verify ownership and existence
+    const { data: existingSource, error: fetchError } = await this.supabase
+      .from("generation_sources")
+      .select("id, user_id")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (fetchError) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to fetch generation source ${id}:`, fetchError);
+      throw new Error("Failed to fetch generation source");
+    }
+
+    if (!existingSource) {
+      throw new GenerationSourceNotFoundError(id);
+    }
+
+    if (existingSource.user_id !== userId) {
+      throw new GenerationSourceForbiddenError(id);
+    }
+
+    // Step 2: Delete the generation source
+    const { error: deleteError } = await this.supabase
+      .from("generation_sources")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (deleteError) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to delete generation source ${id}:`, deleteError);
+      throw new Error("Failed to delete generation source");
     }
   }
 }

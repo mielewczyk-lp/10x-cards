@@ -78,6 +78,12 @@ export default function Topbar({ userEmail }: TopbarProps) {
               Statistics
             </a>
             <a
+              href="/logs"
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+            >
+              Logs
+            </a>
+            <a
               href="/account"
               className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
             >
@@ -138,6 +144,12 @@ export default function Topbar({ userEmail }: TopbarProps) {
                 className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors py-2"
               >
                 Statistics
+              </a>
+              <a
+                href="/logs"
+                className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors py-2"
+              >
+                Logs
               </a>
               <a
                 href="/account"

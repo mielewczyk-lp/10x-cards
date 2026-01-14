@@ -112,6 +112,22 @@ export interface PaginatedGenerationSourcesDto {
   totalPages: number;
 }
 
+/**
+ * DTO for error log item
+ */
+export interface ErrorLogDto {
+  id: string;
+  errorMessage: string;
+  createdAt: string;
+}
+
+/**
+ * Response for listing error logs (all errors in one array)
+ */
+export interface ErrorLogsResponseDto {
+  errors: ErrorLogDto[];
+}
+
 // -----------------------------------------------------------------------------
 // FLASHCARD – COMMAND MODELS & DTOS
 // -----------------------------------------------------------------------------
