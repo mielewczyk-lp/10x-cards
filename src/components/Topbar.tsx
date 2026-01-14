@@ -66,6 +66,12 @@ export default function Topbar({ userEmail }: TopbarProps) {
               Flashcards
             </a>
             <a
+              href="/review"
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+            >
+              Review
+            </a>
+            <a
               href="/stats"
               className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
             >
@@ -120,6 +126,12 @@ export default function Topbar({ userEmail }: TopbarProps) {
                 className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors py-2"
               >
                 Flashcards
+              </a>
+              <a
+                href="/review"
+                className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors py-2"
+              >
+                Review
               </a>
               <a
                 href="/stats"

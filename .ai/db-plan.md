@@ -30,6 +30,10 @@
 - `back TEXT NOT NULL CHECK (length(trim(back)) > 0 AND length(back) <= 500)`
 - `source_type VARCHAR(20) NOT NULL CHECK (source_type IN ('ai-full','ai-edited','manual'))`
 - `search_vector TSVECTOR GENERATED ALWAYS AS (to_tsvector('simple', coalesce(front,'') || ' ' || coalesce(back,''))) STORED`
+- `sm2_interval INTEGER NOT NULL DEFAULT 0 CHECK (sm2_interval >= 0)`
+- `sm2_repetition INTEGER NOT NULL DEFAULT 0 CHECK (sm2_repetition >= 0)`
+- `sm2_efactor DECIMAL(3,2) NOT NULL DEFAULT 2.50 CHECK (sm2_efactor >= 1.3 AND sm2_efactor <= 3.0)`
+- `next_review_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 - `created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 - `updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`
 
@@ -45,6 +49,7 @@
 - `CREATE INDEX idx_flashcards_user_created ON flashcards(user_id, created_at DESC);`
 - `CREATE INDEX idx_flashcards_user_updated ON flashcards(user_id, updated_at DESC NULLS LAST);`
 - `CREATE INDEX idx_flashcards_search ON flashcards USING GIN(search_vector);`
+- `CREATE INDEX idx_flashcards_next_review ON flashcards(user_id, next_review_at ASC);`
 
 4. Zasady PostgreSQL (RLS)
 
@@ -60,4 +65,4 @@
 - Utrzymuj spójność kolumn `updated_at` za pomocą triggera `SET updated_at = NOW()` na `generation_sources` i `flashcards`.
 - Hard delete w całej bazie; usunięcie użytkownika kaskadowo usuwa jego źródła i fiszki.
 - Telemetria KPI pochodzi z pól statystycznych `generation_sources` oraz `source_type` w `flashcards`, co pozwala raportować udział AI vs manual oraz wskaźniki akceptacji.
-- Brak tabel sesji powtórek oraz metadanych spaced repetition w MVP zgodnie z decyzjami architektonicznymi; struktura pozwala na ich dodanie w przyszłości (np. FK do `flashcards`).
+- Stan algorytmu SM-2 przechowywany bezpośrednio w tabeli `flashcards`. Sesje powtórek są tymczasowe (React state/sessionStorage), ale stan każdej fiszki persystuje w bazie po każdej odpowiedzi, co pozwala na kalkulację harmonogramu w kolejnych sesjach.

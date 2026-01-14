@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { ReviewSessionPanel } from "@/components/review/ReviewSessionPanel";
+
+export const prerender = false;
+
+// Protected page - user must be logged in (enforced by middleware)
+const { user } = Astro.locals;
+---
+
+<Layout title="Review Session">
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Review Session</h1>
+      <p class="text-neutral-600 dark:text-neutral-400 mt-2">Practice your flashcards using spaced repetition</p>
+    </div>
+
+    <ReviewSessionPanel client:load />
+  </main>
+</Layout>

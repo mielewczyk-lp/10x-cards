@@ -61,11 +61,13 @@ Pozostałe kluczowe widoki to lista zaakceptowanych fiszek, opcjonalny ekran ses
 
 ### Review Session
 
-**Ścieżka URL:** `/review` (feature-flag)  
+**Ścieżka URL:** `/review`  
 **Główny cel:** Przeprowadzenie sesji powtórek  
 **Kluczowe informacje:** Kolejka fiszek, front, przycisk „Show answer”, ocena wiedzy (Easy/Hard/Again)  
-**Kluczowe komponenty:** `ReviewCard`, `AnswerButtons`, `ProgressBar`  
-**UX / A11y / Bezpieczeństwo:** Klawisze skrótów, focus management, zapis wyników, obsługa braku fiszek
+**Kluczowe komponenty:** `ReviewCard`, `AnswerButtons`, `ReviewProgress`, `ReviewEmptyState`  
+**UX / A11y / Bezpieczeństwo:** Warning modal przy próbie opuszczenia strony podczas aktywnej sesji ("Are you sure? Progress will be lost"), wymaga aktywnej sesji Supabase (guard), obsługa edge case: brak fiszek do powtórki (komunikat "All caught up! Come back later.")
+
+⚠️ **Uwaga o persystencji**: Sesja jest tymczasowa - zamknięcie okna przeglądarki przerywa sesję. Stan powtórek każdej fiszki (harmonogram SM-2) jest zapisywany w bazie po każdej odpowiedzi i wykorzystywany w kolejnych sesjach.
 
 ### Account Settings
 
@@ -103,7 +105,7 @@ Pozostałe kluczowe widoki to lista zaakceptowanych fiszek, opcjonalny ekran ses
    a. wyszukać,
    b. edytować (modal),
    c. usunąć (confirm).
-6. (Opcjonalnie) → `Review` → start POST `/review-sessions` → ocenia kolejne karty (PATCH) → sesja kończy się komunikatem.
+6. Użytkownik przechodzi do Review → POST `/review-sessions` → otrzymuje kolejkę → ocenia kolejne fiszki (każda PATCH aktualizuje stan SM-2 w bazie) → sesja kończy się gdy kolejka jest pusta lub użytkownik zamyka okno.
 7. Użytkownik otwiera `Account` aby zmienić hasło lub usunąć konto.
 8. Wylogowanie → redirect `/login` i czyszczenie sesji.
 
@@ -114,7 +116,8 @@ Top-bar (desktop) / Hamburger (mobile):
 - Brand logo → `/create`
 - Create (tabbed AI / Manual)
 - Flashcards
-- Review (feature-flag)
+- Review
+- Statistics
 - Account (menu: Change password, Delete account, Logout)
 
 Widok Create wykorzystuje zakładki (`shadcn/ui Tabs`) aby przełączać AI/Manual bez zmiany ścieżki poza query param `tab`. Modalowane ścieżki (`#/create/manual`, `?edit={id}`) wykorzystują portal i zachowują tło.
