@@ -1,45 +1,45 @@
-# REST API Plan
+# Plan REST API
 
-## 1. Resources
+## 1. Zasoby
 
-| Resource                | DB Table             | Description                                                                      |
-| ----------------------- | -------------------- | -------------------------------------------------------------------------------- |
-| User                    | `auth.users`         | End-user account handled by Supabase Auth                                        |
-| GenerationSource        | `generation_sources` | Single request to the AI engine together with aggregated review stats            |
-| Flashcard               | `flashcards`         | Accepted, user-owned flashcard visible in study lists                            |
-| ReviewSession (virtual) | —                    | In-memory queue produced by spaced-repetition library; no dedicated table in MVP |
+| Zasób                   | Tabela w bazie       | Opis                                                                                      |
+| ----------------------- | -------------------- | ----------------------------------------------------------------------------------------- |
+| User                    | `auth.users`         | Konto użytkownika zarządzane przez Supabase Auth                                          |
+| GenerationSource        | `generation_sources` | Pojedyncze żądanie do silnika AI wraz z zagregowanymi statystykami recenzji              |
+| Flashcard               | `flashcards`         | Zaakceptowana fiszka należąca do użytkownika, widoczna na listach do nauki               |
+| ReviewSession (virtual) | —                    | Kolejka w pamięci generowana przez bibliotekę spaced-repetition; brak dedykowanej tabeli w MVP |
 
-## 2. Endpoints
+## 2. Endpointy
 
-### 2.1 Authentication (Supabase‐managed)
+### 2.1 Autentykacja (zarządzana przez Supabase)
 
-Supabase handles sign-up, sign-in, sign-out, password reset and user deletion through its built-in `/auth/*` routes and JS SDK. All other endpoints require the `Authorization: Bearer <access_token>` header carrying the Supabase JWT.
+Supabase obsługuje rejestrację, logowanie, wylogowanie, reset hasła i usuwanie użytkownika przez wbudowane ścieżki `/auth/*` i JS SDK. Wszystkie pozostałe endpointy wymagają nagłówka `Authorization: Bearer <access_token>` zawierającego JWT Supabase.
 
 ---
 
 ### 2.2 Generation Sources
 
-| Verb  | Path                       | Description                                                                                |
-| ----- | -------------------------- | ------------------------------------------------------------------------------------------ |
-| POST  | `/generation-sources`      | Start AI generation, persist `input_text_hash`, call OpenRouter, return list of candidates |
-| GET   | `/generation-sources/{id}` | Fetch metadata & stats for one source (no candidates)                                      |
-| PATCH | `/generation-sources/{id}` | Update `total_*` stats after user review                                                   |
-| GET   | `/generation-sources`      | Paginated list filtered by current user                                                    |
+| Czasownik | Ścieżka                    | Opis                                                                                        |
+| --------- | -------------------------- | ------------------------------------------------------------------------------------------- |
+| POST      | `/generation-sources`      | Rozpocznij generację AI, zapisz `input_text_hash`, wywołaj OpenRouter, zwróć listę kandydatów |
+| GET       | `/generation-sources/{id}` | Pobierz metadane i statystyki dla jednego źródła (bez kandydatów)                          |
+| PATCH     | `/generation-sources/{id}` | Zaktualizuj statystyki `total_*` po recenzji użytkownika                                   |
+| GET       | `/generation-sources`      | Lista stronicowana przefiltrowana dla aktualnego użytkownika                               |
 
-**Query parameters (GET list)**
+**Parametry zapytania (GET lista)**
 
-- `page`, `page_size` – pagination (default 1 / 20)
-- `sort` – `created_at` (default `desc`)
+- `page`, `page_size` – stronicowanie (domyślnie 1 / 20)
+- `sort` – `created_at` (domyślnie `desc`)
 
 **Request → POST /generation-sources**
 
 ```json
 {
-  "inputText": "string 1000–10000 chars"
+  "inputText": "string 1000–10000 znaków"
 }
 ```
 
-**Success 201 Response**
+**Sukces 201 Response**
 
 ```json
 {
@@ -52,28 +52,28 @@ Supabase handles sign-up, sign-in, sign-out, password reset and user deletion th
 }
 ```
 
-**Validation / Error Codes**
+**Walidacja / Kody błędów**
 
-- 400 `INPUT_TEXT_INVALID` – length <1000 or >10000
-- 502 `AI_SERVICE_UNAVAILABLE` – upstream failure
+- 400 `INPUT_TEXT_INVALID` – długość <1000 lub >10000
+- 502 `AI_SERVICE_UNAVAILABLE` – błąd usługi upstream
 
 ---
 
 ### 2.3 Flashcards
 
-| Verb   | Path               | Description                                                    |
-| ------ | ------------------ | -------------------------------------------------------------- |
-| GET    | `/flashcards`      | Paginated search of user flashcards                            |
-| POST   | `/flashcards`      | Create one or more flashcards (manual or accepted)             |
-| GET    | `/flashcards/{id}` | Retrieve single flashcard                                      |
-| PATCH  | `/flashcards/{id}` | Update front/back, source_type becomes `ai-edited` when edited |
-| DELETE | `/flashcards/{id}` | Hard-delete flashcard                                          |
+| Czasownik | Ścieżka            | Opis                                                                 |
+| --------- | ------------------ | -------------------------------------------------------------------- |
+| GET       | `/flashcards`      | Wyszukiwanie stronicowane fiszek użytkownika                         |
+| POST      | `/flashcards`      | Utwórz jedną lub więcej fiszek (manualne lub zaakceptowane)          |
+| GET       | `/flashcards/{id}` | Pobierz pojedynczą fiszkę                                            |
+| PATCH     | `/flashcards/{id}` | Zaktualizuj front/back, source_type zmienia się na `ai-edited` po edycji |
+| DELETE    | `/flashcards/{id}` | Usuń fiszkę na stałe (hard-delete)                                   |
 
-**Query parameters (GET list)**
+**Parametry zapytania (GET lista)**
 
-- `q` – full-text search across front/back (tokenised via `to_tsvector`)
-- `page`, `page_size` – pagination (default 1 / 20, max 100)
-- `sort` – `created_at` | `updated_at` (default `created_at desc`)
+- `q` – wyszukiwanie pełnotekstowe w front/back (tokenizowane przez `to_tsvector`)
+- `page`, `page_size` – stronicowanie (domyślnie 1 / 20, max 100)
+- `sort` – `created_at` | `updated_at` (domyślnie `created_at desc`)
 
 **Request → POST /flashcards**
 
@@ -88,7 +88,7 @@ Supabase handles sign-up, sign-in, sign-out, password reset and user deletion th
 ]
 ```
 
-**Success 201 Response**
+**Sukces 201 Response**
 
 ```json
 {
@@ -101,81 +101,120 @@ Supabase handles sign-up, sign-in, sign-out, password reset and user deletion th
 }
 ```
 
-**Validation Rules**
+**Zasady walidacji**
 
-- `front` / `back` trimmed, non-empty, max length enforced (200 / 500)
-- `sourceType` must be one of allowed literal values
-- If `generationSourceId` given → verify it belongs to caller
+- `front` / `back` przycięte (trimmed), niepuste, maksymalna długość wymuszona (200 / 500)
+- `sourceType` musi być jedną z dozwolonych wartości literalnych
+- Jeśli podano `generationSourceId` → zweryfikuj, że należy do wywołującego
 
-**Error Codes**
+**Kody błędów**
 
 - 400 `FIELD_VALIDATION_FAILED`
-- 403 `FORBIDDEN` – violates RLS or ownership
-- 404 `NOT_FOUND` – id does not exist
+- 403 `FORBIDDEN` – naruszenie RLS lub własności
+- 404 `NOT_FOUND` – id nie istnieje
 
 ---
 
 ### 2.4 Review Session (spaced repetition)
 
-No persistence in MVP – the algorithm consumes the user’s flashcards list and returns a queue.
+Sesje nie są persystowane jako encje – kolejka żyje w pamięci klienta. Stan algorytmu SM-2 każdej fiszki jest aktualizowany w bazie po każdej odpowiedzi.
 
-| Verb  | Path                            | Description                                                       |
-| ----- | ------------------------------- | ----------------------------------------------------------------- |
-| POST  | `/review-sessions`              | Start session, returns ordered queue of flashcard IDs & due dates |
-| PATCH | `/review-sessions/{id}/reviews` | Submit user rating for a flashcard, receive next item             |
+| Czasownik | Ścieżka                                   | Opis                                                     |
+| --------- | ----------------------------------------- | -------------------------------------------------------- |
+| POST      | `/review-sessions`                        | Pobierz fiszki do powtórki (next_review_at <= NOW())     |
+| PATCH     | `/review-sessions/flashcards/{id}/answer` | Zapisz odpowiedź, aktualizuj SM-2, zwróć kolejną fiszkę  |
 
 **Request → POST /review-sessions**
 
 ```json
 {
-  "limit": 20
+  "limit": 20  // domyślnie 20, max 50
 }
 ```
 
-**Success 201 Response**
+**Sukces 200 Response**
 
 ```json
 {
-  "sessionId": "uuid",
-  "queue": [{ "flashcardId": "uuid", "dueAt": "ISO-8601" }]
+  "flashcards": [
+    {
+      "id": "uuid",
+      "front": "string",
+      "back": "string",
+      "sm2State": {
+        "interval": 0,
+        "repetition": 0,
+        "efactor": 2.50
+      }
+    }
+  ],
+  "total": 15
 }
 ```
 
+**Request → PATCH /review-sessions/flashcards/{id}/answer**
+
+```json
+{
+  "grade": 4  // 0-5 wg skali SM-2
+}
+```
+
+**Sukces 200 Response**
+
+```json
+{
+  "nextReviewAt": "ISO-8601",
+  "hasMore": true,
+  "nextFlashcard": { /* jw. */ } | null
+}
+```
+
+**Zasady walidacji**
+
+- `grade` musi być integer 0-5
+- `flashcard_id` musi należeć do aktualnego użytkownika (RLS)
+
+**Kody błędów**
+
+- 400 `INVALID_GRADE` - grade poza zakresem
+- 404 `FLASHCARD_NOT_FOUND` - fiszka nie istnieje lub nie należy do użytkownika
+
 ---
 
-## 3. Authentication & Authorisation
+## 3. Autentykacja i autoryzacja
 
-1. **Supabase JWT** – every request (except `/auth/*`) carries an access token.
-2. **Row Level Security** – tables `generation_sources` and `flashcards` enable RLS with policies:
-   - SELECT / UPDATE / DELETE restricted to `user_id = auth.uid()`
-   - INSERT must match `WITH CHECK (user_id = auth.uid())`
-3. **Rate Limiting** – Cloudflare / Edge Function middleware: 60 requests / minute per IP.
+1. **Supabase JWT** – każde żądanie (oprócz `/auth/*`) zawiera access token.
+2. **Row Level Security** – tabele `generation_sources` i `flashcards` mają włączony RLS z politykami:
+   - SELECT / UPDATE / DELETE ograniczone do `user_id = auth.uid()`
+   - INSERT musi spełniać `WITH CHECK (user_id = auth.uid())`
+3. **Rate Limiting** – Cloudflare / Edge Function middleware: 60 żądań / minutę na IP.
 
-## 4. Validation & Business Logic
+## 4. Walidacja i logika biznesowa
 
-| Resource         | Validation                                                   | Business Logic                                                                               |
-| ---------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| GenerationSource | `inputText` length 1000–10000                                | After generation store `total_generated` size; stats updated after review                    |
-| Flashcard        | `front` 1–200, `back` 1–500, `sourceType` enum; FK ownership | Editing a previously AI card flips `sourceType` → `ai-edited`                                |
-| Review Session   | `limit` 1-50                                                 | Queue ordered by spaced-repetition lib; each PATCH updates next due date (library in memory) |
+| Zasób            | Walidacja                                                    | Logika biznesowa                                                                                      |
+| ---------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| GenerationSource | `inputText` długość 1000–10000                               | Po generacji zapisz rozmiar `total_generated`; statystyki aktualizowane po recenzji                  |
+| Flashcard        | `front` 1–200, `back` 1–500, `sourceType` enum; własność FK  | Edycja wcześniej wygenerowanej fiszki AI zmienia `sourceType` → `ai-edited`                          |
+| Review Session   | `limit` 1-50                                                 | Kolejka uporządkowana przez bibliotekę spaced-repetition; każdy PATCH aktualizuje następny termin powtórki |
 
-Triggers ensure `updated_at = NOW()` on UPDATE for both tables.
+Triggery zapewniają `updated_at = NOW()` przy UPDATE dla obu tabel.
 
-## 5. Error Handling (common JSON envelope)
+## 5. Obsługa błędów (wspólna koperta JSON)
 
 ```json
 {
   "error": {
     "code": "STRING_CODE",
-    "message": "Human readable explanation"
+    "message": "Czytelne dla człowieka wyjaśnienie"
   }
 }
 ```
 
-HTTP status conveys category (4xx client / 5xx server). All validation errors use 400 with field-level messages.
+Status HTTP przekazuje kategorię (4xx klient / 5xx serwer). Wszystkie błędy walidacji używają 400 z komunikatami na poziomie pól.
 
-## 6. Performance & Indexing
+## 6. Wydajność i indeksowanie
 
-- GIN index `idx_flashcards_search` backs full-text `q` filter.
-- Composite indexes on `(user_id, created_at)` and `(user_id, updated_at)` satisfy list sorting.
-- `inputText` not indexed – written once, rarely read.
+- Indeks GIN `idx_flashcards_search` wspiera filtr pełnotekstowy `q`.
+- Indeksy złożone na `(user_id, created_at)` i `(user_id, updated_at)` obsługują sortowanie list.
+- `inputText` nie jest indeksowany – zapisywany raz, rzadko odczytywany.
