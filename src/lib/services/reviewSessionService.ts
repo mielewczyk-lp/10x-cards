@@ -10,9 +10,12 @@ import type {
  * Error thrown when no flashcards are available for review
  */
 export class NoFlashcardsAvailableError extends Error {
-  constructor() {
+  public nextReviewDate: string | null;
+
+  constructor(nextReviewDate: string | null = null) {
     super("No flashcards available for review");
     this.name = "NoFlashcardsAvailableError";
+    this.nextReviewDate = nextReviewDate;
   }
 }
 
@@ -70,7 +73,17 @@ export class ReviewSessionService {
     }
 
     if (!flashcards || flashcards.length === 0) {
-      throw new NoFlashcardsAvailableError();
+      // No flashcards ready for review - fetch next review date
+      const { data: nextFlashcard } = await this.supabase
+        .from("flashcards")
+        .select("next_review_at")
+        .eq("user_id", userId)
+        .gt("next_review_at", new Date().toISOString())
+        .order("next_review_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      throw new NoFlashcardsAvailableError(nextFlashcard?.next_review_at || null);
     }
 
     // Map to DTOs with SM-2 state

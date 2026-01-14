@@ -55,6 +55,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         JSON.stringify({
           flashcards: [],
           total: 0,
+          nextReviewDate: error.nextReviewDate,
         }),
         {
           status: 200,

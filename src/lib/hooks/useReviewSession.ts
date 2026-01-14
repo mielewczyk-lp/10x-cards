@@ -18,11 +18,12 @@ interface State {
   error: string | null;
   totalReviewed: number;
   sessionActive: boolean;
+  nextReviewDate: string | null;
 }
 
 type Action =
   | { type: "START_SESSION_REQUEST" }
-  | { type: "START_SESSION_SUCCESS"; payload: { flashcards: ReviewSessionFlashcardDto[] } }
+  | { type: "START_SESSION_SUCCESS"; payload: { flashcards: ReviewSessionFlashcardDto[]; nextReviewDate?: string | null } }
   | { type: "START_SESSION_ERROR"; payload: string }
   | { type: "SUBMIT_ANSWER_REQUEST" }
   | { type: "SUBMIT_ANSWER_SUCCESS"; payload: { nextFlashcard: ReviewSessionFlashcardDto | null } }
@@ -41,6 +42,7 @@ const initialState: State = {
   error: null,
   totalReviewed: 0,
   sessionActive: false,
+  nextReviewDate: null,
 };
 
 function reducer(state: State, action: Action): State {
@@ -60,6 +62,7 @@ function reducer(state: State, action: Action): State {
         currentIndex: 0,
         totalReviewed: 0,
         sessionActive: action.payload.flashcards.length > 0,
+        nextReviewDate: action.payload.nextReviewDate || null,
         error: null,
       };
 
@@ -168,7 +171,7 @@ export function useReviewSession() {
 
       dispatch({
         type: "START_SESSION_SUCCESS",
-        payload: { flashcards: data.flashcards },
+        payload: { flashcards: data.flashcards, nextReviewDate: data.nextReviewDate },
       });
 
       return data;
@@ -257,6 +260,7 @@ export function useReviewSession() {
     isLoading: state.isLoading,
     error: state.error,
     sessionActive: state.sessionActive,
+    nextReviewDate: state.nextReviewDate,
     progress,
 
     // Actions

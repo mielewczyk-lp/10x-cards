@@ -20,7 +20,7 @@ import { Loader2 } from "lucide-react";
  * - Error handling with toast notifications
  */
 export function ReviewSessionPanel() {
-  const { currentFlashcard, isLoading, error, sessionActive, progress, startSession, submitAnswer, endSession } =
+  const { currentFlashcard, isLoading, error, sessionActive, nextReviewDate, progress, startSession, submitAnswer, endSession } =
     useReviewSession();
 
   const [showAnswerButtons, setShowAnswerButtons] = useState(false);
@@ -80,7 +80,7 @@ export function ReviewSessionPanel() {
 
   // Empty state - no flashcards available
   if (!sessionActive && !isLoading) {
-    return <ReviewEmptyState onNavigateToFlashcards={handleNavigateToFlashcards} />;
+    return <ReviewEmptyState onNavigateToFlashcards={handleNavigateToFlashcards} nextReviewDate={nextReviewDate} />;
   }
 
   // Session completed

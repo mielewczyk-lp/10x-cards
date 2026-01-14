@@ -148,7 +148,8 @@ Sesje nie są persystowane jako encje – kolejka żyje w pamięci klienta. Stan
       }
     }
   ],
-  "total": 15
+  "total": 15,
+  "nextReviewDate": "ISO-8601"  // Data następnej zaplanowanej powtórki (null jeśli są fiszki dostępne)
 }
 ```
 

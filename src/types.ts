@@ -233,6 +233,7 @@ export interface StartReviewSessionCommand {
 export interface StartReviewSessionResponseDto {
   flashcards: ReviewSessionFlashcardDto[];
   total: number;
+  nextReviewDate?: string | null;
 }
 
 /**
