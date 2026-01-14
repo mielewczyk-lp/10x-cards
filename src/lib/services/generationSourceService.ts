@@ -6,6 +6,7 @@ import type {
   FlashcardCandidateDto,
   GenerationSourceInsert,
   GenerationSourceUpdate,
+  UpdateGenerationSourceCommand,
 } from "../../types";
 import type { FlashcardGenerationService } from "./flashcardGenerationService";
 
@@ -19,6 +20,26 @@ export class AIServiceError extends Error {
   ) {
     super(message);
     this.name = "AIServiceError";
+  }
+}
+
+/**
+ * Error thrown when a generation source is not found
+ */
+export class GenerationSourceNotFoundError extends Error {
+  constructor(id: string) {
+    super(`Generation source with id ${id} not found`);
+    this.name = "GenerationSourceNotFoundError";
+  }
+}
+
+/**
+ * Error thrown when a generation source doesn't belong to the user
+ */
+export class GenerationSourceForbiddenError extends Error {
+  constructor(id: string) {
+    super(`Generation source with id ${id} does not belong to the user`);
+    this.name = "GenerationSourceForbiddenError";
   }
 }
 
@@ -110,5 +131,70 @@ export class GenerationSourceService {
       createdAt: generationSource.created_at,
       candidates,
     };
+  }
+
+  /**
+   * Update telemetry statistics for a generation source after user review
+   *
+   * @param id - ID of the generation source to update
+   * @param command - Statistics to update
+   * @param userId - ID of the user updating the generation source
+   * @throws GenerationSourceNotFoundError if generation source doesn't exist
+   * @throws GenerationSourceForbiddenError if generation source doesn't belong to user
+   */
+  async updateStats(id: string, command: UpdateGenerationSourceCommand, userId: string): Promise<void> {
+    // Step 1: Verify ownership and existence
+    const { data: existingSource, error: fetchError } = await this.supabase
+      .from("generation_sources")
+      .select("id, user_id")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (fetchError) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to fetch generation source ${id}:`, fetchError);
+      throw new Error("Failed to fetch generation source");
+    }
+
+    if (!existingSource) {
+      throw new GenerationSourceNotFoundError(id);
+    }
+
+    if (existingSource.user_id !== userId) {
+      throw new GenerationSourceForbiddenError(id);
+    }
+
+    // Step 2: Prepare update data
+    const updateData: GenerationSourceUpdate = {};
+
+    if (command.totalAccepted !== undefined) {
+      updateData.total_accepted = command.totalAccepted;
+    }
+
+    if (command.totalAcceptedEdited !== undefined) {
+      updateData.total_accepted_edited = command.totalAcceptedEdited;
+    }
+
+    if (command.totalRejected !== undefined) {
+      updateData.total_rejected = command.totalRejected;
+    }
+
+    // Step 3: Guard - if no updates, return early
+    if (Object.keys(updateData).length === 0) {
+      return;
+    }
+
+    // Step 4: Execute update
+    const { error: updateError } = await this.supabase
+      .from("generation_sources")
+      .update(updateData)
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (updateError) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to update generation source ${id}:`, updateError);
+      throw new Error("Failed to update generation source statistics");
+    }
   }
 }

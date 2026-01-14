@@ -164,6 +164,39 @@ export interface PaginatedFlashcardsDto {
 }
 
 // -----------------------------------------------------------------------------
+// KPI STATS
+// -----------------------------------------------------------------------------
+
+/**
+ * DTO for AI acceptance rate statistics
+ */
+export interface AIAcceptanceRateDto {
+  totalGenerated: number;
+  totalAccepted: number;
+  totalAcceptedEdited: number;
+  totalRejected: number;
+  acceptanceRate: number;
+}
+
+/**
+ * DTO for AI flashcard share statistics
+ */
+export interface AIFlashcardShareDto {
+  totalFlashcards: number;
+  aiFlashcards: number;
+  manualFlashcards: number;
+  aiSharePercentage: number;
+}
+
+/**
+ * DTO for GET /api/stats - combined KPI metrics
+ */
+export interface StatsResponseDto {
+  aiAcceptanceRate: AIAcceptanceRateDto;
+  aiFlashcardShare: AIFlashcardShareDto;
+}
+
+// -----------------------------------------------------------------------------
 // ERROR ENVELOPE
 // -----------------------------------------------------------------------------
 
