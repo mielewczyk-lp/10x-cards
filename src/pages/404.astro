@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ErrorPage from "@/components/ErrorPage";
+
+export const prerender = false;
+
+// Determine home URL based on authentication status
+const user = Astro.locals.user;
+const homeUrl = user ? "/create" : "/login";
+---
+
+<Layout title="404 - Page Not Found">
+  <ErrorPage client:load homeUrl={homeUrl} />
+</Layout>
