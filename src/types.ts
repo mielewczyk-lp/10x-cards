@@ -270,6 +270,95 @@ export interface SubmitAnswerResponseDto {
 }
 
 // -----------------------------------------------------------------------------
+// LEARNING STATS – DTOS
+// -----------------------------------------------------------------------------
+
+/**
+ * Distribution of flashcards by mastery level
+ * Based on sm2_repetition count
+ */
+export interface MasteryDistributionDto {
+  /** Cards never reviewed (repetition = 0) */
+  newCards: number;
+  /** Cards in learning phase (repetition 1-2) */
+  learningCards: number;
+  /** Mastered cards (repetition >= 3) */
+  masteredCards: number;
+  /** Total flashcards */
+  totalCards: number;
+}
+
+/**
+ * Schedule of upcoming reviews
+ * Based on next_review_at timestamps
+ */
+export interface DueCardsDto {
+  /** Cards due now (next_review_at <= NOW) */
+  dueNow: number;
+  /** Cards due tomorrow */
+  dueTomorrow: number;
+  /** Cards due within next 7 days */
+  dueThisWeek: number;
+  /** Cards due within next 14 days */
+  dueNextWeek: number;
+}
+
+/**
+ * Overall statistics about flashcard collection
+ */
+export interface TotalCardsDto {
+  /** Total number of flashcards */
+  totalCards: number;
+  /** Cards reviewed at least once (repetition > 0) */
+  reviewedAtLeastOnce: number;
+  /** Cards never reviewed yet (repetition = 0) */
+  neverReviewedYet: number;
+  /** Average ease factor across all cards */
+  avgEaseFactor: number;
+  /** Timestamp of last review (most recent updated_at where repetition > 0) */
+  lastReviewDate: string | null;
+}
+
+/**
+ * Response for GET /api/stats/learning
+ * Combined learning statistics
+ */
+export interface LearningStatsResponseDto {
+  mastery: MasteryDistributionDto;
+  schedule: DueCardsDto;
+  totals: TotalCardsDto;
+}
+
+// -----------------------------------------------------------------------------
+// FREE LEARNING (PRACTICE MODE) – COMMAND MODELS & DTOS
+// -----------------------------------------------------------------------------
+
+/**
+ * Simple flashcard DTO for practice mode (without SM-2 state)
+ */
+export interface PracticeFlashcardDto {
+  id: string;
+  front: string;
+  back: string;
+}
+
+/**
+ * Command → POST /flashcards/practice
+ */
+export interface StartPracticeCommand {
+  /** Number of flashcards to fetch (10, 20, or 50) */
+  limit: number;
+}
+
+/**
+ * Response → POST /flashcards/practice
+ */
+export interface StartPracticeResponseDto {
+  flashcards: PracticeFlashcardDto[];
+  total: number;
+}
+
+// -----------------------------------------------------------------------------
 // ERROR ENVELOPE
 // -----------------------------------------------------------------------------
 

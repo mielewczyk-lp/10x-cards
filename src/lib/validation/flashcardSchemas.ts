@@ -95,9 +95,26 @@ export const ListFlashcardsQuerySchema = z.object({
 });
 
 /**
+ * Validation schema for POST /flashcards/practice
+ * Limit must be one of: 10, 20, 50
+ */
+export const StartPracticeSchema = z.object({
+  limit: z
+    .number({
+      required_error: "LIMIT_REQUIRED",
+      invalid_type_error: "LIMIT_INVALID",
+    })
+    .int({ message: "LIMIT_MUST_BE_INTEGER" })
+    .refine((val) => [10, 20, 50].includes(val), {
+      message: "LIMIT_MUST_BE_10_20_OR_50",
+    }),
+});
+
+/**
  * Type inference from the schemas
  */
 export type CreateFlashcardInput = z.infer<typeof CreateFlashcardSchema>;
 export type CreateFlashcardsInput = z.infer<typeof CreateFlashcardsSchema>;
 export type UpdateFlashcardInput = z.infer<typeof UpdateFlashcardSchema>;
 export type ListFlashcardsQueryInput = z.infer<typeof ListFlashcardsQuerySchema>;
+export type StartPracticeInput = z.infer<typeof StartPracticeSchema>;
