@@ -20,8 +20,17 @@ import { Loader2 } from "lucide-react";
  * - Error handling with toast notifications
  */
 export function ReviewSessionPanel() {
-  const { currentFlashcard, isLoading, error, sessionActive, nextReviewDate, progress, startSession, submitAnswer, endSession } =
-    useReviewSession();
+  const {
+    currentFlashcard,
+    isLoading,
+    error,
+    sessionActive,
+    nextReviewDate,
+    progress,
+    startSession,
+    submitAnswer,
+    endSession,
+  } = useReviewSession();
 
   const [showAnswerButtons, setShowAnswerButtons] = useState(false);
 
@@ -63,7 +72,11 @@ export function ReviewSessionPanel() {
 
   // Handle end session
   const handleEndSession = () => {
-    if (confirm("Are you sure you want to end this session? Your progress will be saved.")) {
+    if (
+      confirm(
+        "Are you sure you want to cancel this session? Reviewed cards have been saved, but remaining cards will not be reviewed."
+      )
+    ) {
       endSession();
       window.location.href = "/flashcards";
     }
@@ -105,12 +118,7 @@ export function ReviewSessionPanel() {
   if (currentFlashcard) {
     return (
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <ReviewProgress current={progress.current} total={progress.total} reviewed={progress.reviewed} />
-          <Button onClick={handleEndSession} variant="ghost" size="sm">
-            End Session
-          </Button>
-        </div>
+        <ReviewProgress current={progress.current} total={progress.total} reviewed={progress.reviewed} />
 
         <ReviewCard
           key={currentFlashcard.id}
@@ -119,6 +127,17 @@ export function ReviewSessionPanel() {
         />
 
         {showAnswerButtons && <AnswerButtons onAnswer={handleAnswer} disabled={isLoading} />}
+
+        <div className="flex justify-center pt-4">
+          <Button
+            onClick={handleEndSession}
+            variant="link"
+            size="sm"
+            className="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-400 cursor-pointer"
+          >
+            Cancel Session
+          </Button>
+        </div>
       </div>
     );
   }

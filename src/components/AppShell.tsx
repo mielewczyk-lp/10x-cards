@@ -4,13 +4,14 @@ import type { ReactNode } from "react";
 
 interface AppShellProps {
   userEmail?: string;
+  currentPath?: string;
   children: ReactNode;
 }
 
-export function AppShell({ userEmail, children }: AppShellProps) {
+export function AppShell({ userEmail, currentPath, children }: AppShellProps) {
   return (
     <ThemeProvider>
-      {userEmail && <Topbar userEmail={userEmail} />}
+      {userEmail && <Topbar userEmail={userEmail} currentPath={currentPath} />}
       {children}
     </ThemeProvider>
   );

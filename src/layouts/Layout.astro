@@ -10,6 +10,9 @@ const { title = "10x Cards" } = Astro.props;
 
 // Get user info from locals (set by middleware)
 const user = Astro.locals.user;
+
+// Get current path
+const currentPath = new URL(Astro.request.url).pathname;
 ---
 
 <!doctype html>
@@ -22,21 +25,21 @@ const user = Astro.locals.user;
     <title>{title}</title>
     <script is:inline>
       // Prevent theme flash on page load
-      (function() {
-        const storageKey = '10x-cards-theme';
-        const theme = localStorage.getItem(storageKey) || 'light';
+      (function () {
+        const storageKey = "10x-cards-theme";
+        const theme = localStorage.getItem(storageKey) || "light";
         const root = document.documentElement;
-        
-        if (theme === 'dark') {
-          root.classList.add('dark');
+
+        if (theme === "dark") {
+          root.classList.add("dark");
         } else {
-          root.classList.remove('dark');
+          root.classList.remove("dark");
         }
       })();
     </script>
   </head>
   <body>
-    <AppShell client:load userEmail={user?.email}>
+    <AppShell client:load userEmail={user?.email} currentPath={currentPath}>
       <slot />
     </AppShell>
   </body>

@@ -1,20 +1,59 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { ReviewSessionPanel } from "@/components/review/ReviewSessionPanel";
+import { FreeLearningPanel } from "@/components/review/FreeLearningPanel";
 
 export const prerender = false;
 
 // Protected page - user must be logged in (enforced by middleware)
 const { user } = Astro.locals;
+
+// Check mode from query parameter
+const mode = Astro.url.searchParams.get("mode") || "review";
+const isFreeMode = mode === "free";
+
+// Page metadata based on mode
+const title = isFreeMode ? "Free Learning" : "Review Session";
+const description = isFreeMode
+  ? "Practice your flashcards freely without affecting your review schedule"
+  : "Practice your flashcards using spaced repetition";
 ---
 
-<Layout title="Review Session">
+<Layout title={title}>
   <main class="container mx-auto px-4 py-8">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Review Session</h1>
-      <p class="text-neutral-600 dark:text-neutral-400 mt-2">Practice your flashcards using spaced repetition</p>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">{title}</h1>
+          <p class="text-neutral-600 dark:text-neutral-400 mt-2">{description}</p>
+        </div>
+
+        <!-- Mode Toggle Buttons -->
+        <div class="flex gap-2">
+          <a
+            href="/review?mode=review"
+            class={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-10 px-4 py-2 ${
+              !isFreeMode
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            Review Mode
+          </a>
+          <a
+            href="/review?mode=free"
+            class={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background h-10 px-4 py-2 ${
+              isFreeMode
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            Free Learning
+          </a>
+        </div>
+      </div>
     </div>
 
-    <ReviewSessionPanel client:load />
+    {isFreeMode ? <FreeLearningPanel client:load /> : <ReviewSessionPanel client:load />}
   </main>
 </Layout>

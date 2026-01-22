@@ -10,11 +10,13 @@ const { user } = Astro.locals;
 
 <Layout title="Error Logs">
   <main class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Error Logs</h1>
-      <p class="text-neutral-600 dark:text-neutral-400 mt-2">View and manage generation errors</p>
-    </div>
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Error Logs</h1>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-2">View and manage generation errors</p>
+      </div>
 
-    <LogsPanel client:load />
+      <LogsPanel client:load />
+    </div>
   </main>
 </Layout>

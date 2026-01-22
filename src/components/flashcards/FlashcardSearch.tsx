@@ -47,8 +47,8 @@ export function FlashcardSearch({ searchQuery, onSearchChange, totalItems, isLoa
   };
 
   return (
-    <div className="space-y-2">
-      <div className="relative">
+    <div className="flex items-center gap-4">
+      <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
         <Input
           type="text"
@@ -73,7 +73,11 @@ export function FlashcardSearch({ searchQuery, onSearchChange, totalItems, isLoa
       </div>
 
       {/* Result count */}
-      <div className="text-sm text-neutral-600 dark:text-neutral-400" aria-live="polite" aria-atomic="true">
+      <div
+        className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {isLoading ? (
           "Searching..."
         ) : (

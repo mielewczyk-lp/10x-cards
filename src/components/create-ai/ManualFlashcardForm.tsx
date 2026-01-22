@@ -49,48 +49,50 @@ export default function ManualFlashcardForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="manual-front">
-                Front <span className="text-sm text-neutral-500">({front.length}/200)</span>
-              </Label>
-              <Textarea
-                id="manual-front"
-                value={front}
-                onChange={(e) => setFront(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Enter the question or prompt..."
-                className={`min-h-[100px] ${errors.front ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                aria-invalid={!!errors.front}
-                aria-describedby={errors.front ? "manual-front-error" : undefined}
-                disabled={isSubmitting}
-              />
-              {errors.front && (
-                <p id="manual-front-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {errors.front}
-                </p>
-              )}
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="manual-front">
+                  Front <span className="text-sm text-neutral-500">({front.length}/200)</span>
+                </Label>
+                <Textarea
+                  id="manual-front"
+                  value={front}
+                  onChange={(e) => setFront(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter the question or prompt..."
+                  className={`min-h-[150px] ${errors.front ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                  aria-invalid={!!errors.front}
+                  aria-describedby={errors.front ? "manual-front-error" : undefined}
+                  disabled={isSubmitting}
+                />
+                {errors.front && (
+                  <p id="manual-front-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                    {errors.front}
+                  </p>
+                )}
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="manual-back">
-                Back <span className="text-sm text-neutral-500">({back.length}/500)</span>
-              </Label>
-              <Textarea
-                id="manual-back"
-                value={back}
-                onChange={(e) => setBack(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Enter the answer or explanation..."
-                className={`min-h-[150px] ${errors.back ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                aria-invalid={!!errors.back}
-                aria-describedby={errors.back ? "manual-back-error" : undefined}
-                disabled={isSubmitting}
-              />
-              {errors.back && (
-                <p id="manual-back-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {errors.back}
-                </p>
-              )}
+              <div className="space-y-2">
+                <Label htmlFor="manual-back">
+                  Back <span className="text-sm text-neutral-500">({back.length}/500)</span>
+                </Label>
+                <Textarea
+                  id="manual-back"
+                  value={back}
+                  onChange={(e) => setBack(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter the answer or explanation..."
+                  className={`min-h-[150px] ${errors.back ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                  aria-invalid={!!errors.back}
+                  aria-describedby={errors.back ? "manual-back-error" : undefined}
+                  disabled={isSubmitting}
+                />
+                {errors.back && (
+                  <p id="manual-back-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                    {errors.back}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-end">

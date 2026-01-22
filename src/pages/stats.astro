@@ -1,6 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import StatsPanel from "@/components/stats/StatsPanel";
+import LearningStatsPanel from "@/components/stats/LearningStatsPanel";
+
+export const prerender = false;
+
+// Protected page - user must be logged in (enforced by middleware)
+const { user } = Astro.locals;
+
+const url = new URL(Astro.request.url);
+const tab = url.searchParams.get("tab") || "ai";
 ---
 
 <Layout title="Statistics - 10x Cards">
@@ -8,10 +17,47 @@ import StatsPanel from "@/components/stats/StatsPanel";
     <div class="max-w-4xl mx-auto">
       <div class="mb-8">
         <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100">Statistics</h1>
-        <p class="text-neutral-600 dark:text-neutral-400">Track your AI usage and acceptance metrics</p>
+        <p class="text-neutral-600 dark:text-neutral-400">
+          {
+            tab === "ai"
+              ? "Track your AI usage and acceptance metrics"
+              : "Monitor your learning progress and review schedule"
+          }
+        </p>
       </div>
 
-      <StatsPanel client:load />
+      <div class="mb-6">
+        <div class="border-b border-neutral-200 dark:border-neutral-800">
+          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a
+              href="/stats?tab=ai"
+              class={`${
+                tab === "ai"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+              } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors`}
+              aria-current={tab === "ai" ? "page" : undefined}
+            >
+              AI Statistics
+            </a>
+            <a
+              href="/stats?tab=learning"
+              class={`${
+                tab === "learning"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+              } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors`}
+              aria-current={tab === "learning" ? "page" : undefined}
+            >
+              Learning Progress
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      {tab === "ai" && <StatsPanel client:load />}
+
+      {tab === "learning" && <LearningStatsPanel client:load />}
     </div>
   </main>
 </Layout>
