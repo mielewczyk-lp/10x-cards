@@ -7,7 +7,13 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+    <NextThemesProvider 
+      attribute="class" 
+      defaultTheme="light" 
+      enableSystem
+      storageKey="10x-cards-theme"
+      enableColorScheme={false}
+    >
       {children}
     </NextThemesProvider>
   );

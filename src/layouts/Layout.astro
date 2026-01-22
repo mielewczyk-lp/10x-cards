@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import Topbar from "@/components/Topbar";
+import { AppShell } from "@/components/AppShell";
 
 interface Props {
   title?: string;
@@ -21,12 +20,25 @@ const user = Astro.locals.user;
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script is:inline>
+      // Prevent theme flash on page load
+      (function() {
+        const storageKey = '10x-cards-theme';
+        const theme = localStorage.getItem(storageKey) || 'light';
+        const root = document.documentElement;
+        
+        if (theme === 'dark') {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
-    <ThemeProvider client:load>
-      {user && <Topbar client:load userEmail={user.email} />}
+    <AppShell client:load userEmail={user?.email}>
       <slot />
-    </ThemeProvider>
+    </AppShell>
   </body>
 </html>
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, X, LogOut } from "lucide-react";
 
 interface TopbarProps {
@@ -90,9 +91,10 @@ export default function Topbar({ userEmail }: TopbarProps) {
               Account
             </a>
 
-            {/* User info and logout */}
+            {/* User info, theme toggle and logout */}
             <div className="flex items-center space-x-3 pl-3 border-l border-neutral-200 dark:border-neutral-800">
               {userEmail && <span className="text-sm text-neutral-600 dark:text-neutral-400">{userEmail}</span>}
+              <ThemeToggle />
               <Button
                 type="button"
                 variant="outline"
@@ -158,9 +160,13 @@ export default function Topbar({ userEmail }: TopbarProps) {
                 Account
               </a>
 
-              {/* User info and logout for mobile */}
+              {/* User info, theme toggle and logout for mobile */}
               <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800">
                 {userEmail && <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">{userEmail}</p>}
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400">Theme:</span>
+                  <ThemeToggle />
+                </div>
                 <Button
                   type="button"
                   variant="outline"
