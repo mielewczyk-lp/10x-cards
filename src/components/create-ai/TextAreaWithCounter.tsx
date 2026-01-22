@@ -22,16 +22,12 @@ export function TextAreaWithCounter({ value, onChange, charCount, error, disable
 
   return (
     <div className="space-y-2">
-      <label htmlFor={textareaId} className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-        Input Text
-      </label>
-
       <Textarea
         id={textareaId}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        placeholder="Paste your text here (1000-10000 characters)..."
+        placeholder="Paste your learning material here (e.g., lecture notes, article, textbook chapter). AI will generate flashcards from this content. Minimum 1000 characters required."
         className={`min-h-[200px] resize-y ${error ? "border-red-500 focus-visible:ring-red-500" : ""}`}
         aria-describedby={error ? errorId : counterId}
         aria-invalid={!!error}

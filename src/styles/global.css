@@ -6,14 +6,14 @@
 :root {
   --radius: 0.625rem;
   /* Light mode - jasne tło, ciemny tekst */
-  --background: oklch(0.99 0 0); /* Lekko cieplejsze białe tło */
+  --background: oklch(1 0 0); /* Białe tło */
   --foreground: oklch(0.15 0 0); /* Bardzo ciemny tekst dla kontrastu */
   --card: oklch(1 0 0); /* Czyste białe karty */
   --card-foreground: oklch(0.15 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
-  --primary: oklch(0.205 0 0); /* Ciemny primary */
-  --primary-foreground: oklch(0.985 0 0); /* Jasny tekst na ciemnym */
+  --primary: oklch(0.60 0.17 145); /* Zielony primary */
+  --primary-foreground: oklch(0.985 0 0); /* Jasny tekst na zielonym */
   --secondary: oklch(0.96 0 0); /* Lekko szary */
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.96 0 0);
@@ -24,6 +24,7 @@
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.90 0 0); /* Widoczne obramowania */
   --input: oklch(0.90 0 0);
+  --input-background: oklch(1 0 0); /* Białe tło dla inputów */
   --ring: oklch(0.60 0 0); /* Focus ring */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -38,17 +39,18 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.90 0 0);
   --sidebar-ring: oklch(0.60 0 0);
+  --surface: oklch(0.98 0 0); /* Powierzchnie UI (TopBar, etc) */
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0.15 0.03 250); /* Granatowe tło */
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.12 0.03 250); /* Ciemniejszy granatowy dla kart */
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.60 0.17 145); /* Zielony primary */
+  --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -58,6 +60,7 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
+  --input-background: oklch(0.205 0 0); /* Ciemne tło dla inputów w dark mode */
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -72,6 +75,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --surface: oklch(0.12 0.03 250); /* Ciemniejsze powierzchnie UI w dark mode */
 }
 
 @theme inline {
@@ -96,6 +100,7 @@
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-input-background: var(--input-background);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -110,6 +115,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface: var(--surface);
 }
 
 @layer base {

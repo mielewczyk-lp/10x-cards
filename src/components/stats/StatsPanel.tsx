@@ -62,7 +62,7 @@ export default function StatsPanel() {
   const TARGET_PERCENTAGE = 75;
 
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* AI Acceptance Rate Card */}
       <Card>
         <CardHeader>
@@ -175,8 +175,8 @@ export default function StatsPanel() {
         </CardContent>
       </Card>
 
-      {/* Info note */}
-      <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center">
+      {/* Info note - spans both columns */}
+      <div className="md:col-span-2 text-sm text-neutral-600 dark:text-neutral-400 text-center">
         <p>These statistics help track the MVP success criteria:</p>
         <p className="mt-1">
           <strong>Target:</strong> 75% AI acceptance rate and 75% AI flashcard share

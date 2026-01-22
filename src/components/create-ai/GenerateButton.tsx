@@ -18,7 +18,7 @@ export function GenerateButton({ loading, disabled, onClick }: GenerateButtonPro
       ) : (
         <>
           <Sparkles className="mr-2 h-5 w-5" />
-          Generate Flashcards
+          Generate
         </>
       )}
     </Button>

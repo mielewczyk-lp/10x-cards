@@ -85,7 +85,7 @@ export default function LearningStatsPanel() {
   const reviewedPercentage = totals.totalCards > 0 ? (totals.reviewedAtLeastOnce / totals.totalCards) * 100 : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Mastery Progress Card */}
       <Card>
         <CardHeader>
@@ -212,8 +212,8 @@ export default function LearningStatsPanel() {
         </CardContent>
       </Card>
 
-      {/* Info note */}
-      <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center">
+      {/* Info note - spans both columns */}
+      <div className="md:col-span-2 text-sm text-neutral-600 dark:text-neutral-400 text-center">
         <p>These statistics reflect your learning progress using the SM-2 spaced repetition algorithm.</p>
       </div>
     </div>

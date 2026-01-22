@@ -54,11 +54,13 @@ export default function AIFlowPanel() {
           disabled={loadingGenerate}
         />
 
-        <GenerateButton
-          loading={loadingGenerate}
-          disabled={!!inputError || inputText.trim().length === 0 || loadingGenerate}
-          onClick={generate}
-        />
+        <div className="flex justify-center">
+          <GenerateButton
+            loading={loadingGenerate}
+            disabled={!!inputError || inputText.trim().length === 0 || loadingGenerate}
+            onClick={generate}
+          />
+        </div>
       </div>
 
       {/* Candidates Section */}
