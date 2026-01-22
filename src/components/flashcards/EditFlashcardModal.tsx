@@ -17,7 +17,7 @@ import type { FlashcardDto, UpdateFlashcardCommand, ErrorResponseDto } from "../
 
 interface EditFlashcardModalProps {
   flashcard: FlashcardDto;
-  onSave: () => void;
+  onSave: (updatedFlashcard: FlashcardDto) => void;
   onCancel: () => void;
 }
 
@@ -120,8 +120,11 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
         throw new Error(errorData.error.message || "Failed to update flashcard");
       }
 
-      // Success
-      onSave();
+      // Parse the updated flashcard from response
+      const updatedFlashcard: FlashcardDto = await response.json();
+
+      // Success - pass updated flashcard to parent
+      onSave(updatedFlashcard);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
       setError(errorMessage);
