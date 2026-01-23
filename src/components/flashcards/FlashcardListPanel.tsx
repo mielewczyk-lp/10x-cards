@@ -37,6 +37,7 @@ export default function FlashcardListPanel() {
     setOrder,
     setSearchQuery,
     deleteFlashcard,
+    updateFlashcard,
     refreshList,
   } = useFlashcardList();
 
@@ -52,11 +53,12 @@ export default function FlashcardListPanel() {
   };
 
   /**
-   * Handle edit modal save
+   * Handle edit modal save with optimistic update
    */
-  const handleEditSave = () => {
+  const handleEditSave = (updatedFlashcard: FlashcardDto) => {
+    // Update the flashcard in the list with the data from the API response
+    updateFlashcard(updatedFlashcard);
     setEditingFlashcard(null);
-    refreshList();
   };
 
   /**

@@ -37,6 +37,7 @@ interface UseFlashcardListReturn {
   setOrder: (order: SortOrder) => void;
   setSearchQuery: (query: string) => void;
   deleteFlashcard: (id: string) => Promise<void>;
+  updateFlashcard: (updatedFlashcard: FlashcardDto) => void;
   refreshList: () => Promise<void>;
 }
 
@@ -180,6 +181,13 @@ export function useFlashcardList({
   );
 
   /**
+   * Update a single flashcard in the list (optimistic update)
+   */
+  const updateFlashcard = useCallback((updatedFlashcard: FlashcardDto) => {
+    setFlashcards((prev) => prev.map((fc) => (fc.id === updatedFlashcard.id ? updatedFlashcard : fc)));
+  }, []);
+
+  /**
    * Refresh the list (useful after updates)
    */
   const refreshList = useCallback(async () => {
@@ -221,6 +229,7 @@ export function useFlashcardList({
     setOrder,
     setSearchQuery,
     deleteFlashcard,
+    updateFlashcard,
     refreshList,
   };
 }
