@@ -56,7 +56,7 @@ export default function Topbar({ userEmail, currentPath = "/" }: TopbarProps) {
         <div className="flex items-center justify-between h-16">
           {/* Brand logo */}
           <a href="/create" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-            <span className="relative inline-flex items-center justify-center px-2 py-1 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-bold text-lg rounded shadow-[3px_3px_0_0_#10b981,6px_6px_0_0_#059669,9px_9px_0_0_#047857] dark:shadow-[3px_3px_0_0_#059669,6px_6px_0_0_#047857,9px_9px_0_0_#065f46]">
+            <span className="relative inline-flex items-center justify-center px-2 py-1 -top-1 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-bold text-lg rounded shadow-[3px_3px_0_0_#10b981,6px_6px_0_0_#059669,9px_9px_0_0_#047857] dark:shadow-[3px_3px_0_0_#059669,6px_6px_0_0_#047857,9px_9px_0_0_#065f46]">
               10x
             </span>
             <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Cards</span>
