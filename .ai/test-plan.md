@@ -82,7 +82,7 @@ Poza zakresem: import dokumentów, integracje zewnętrzne poza Supabase i OpenRo
 - Supabase: lokalny projekt z migracjami z `supabase/migrations`.
 - Środowisko testowe z osobną bazą i kluczami API.
 - OpenRouter: środowisko testowe z mockami lub kontrolowanym kluczem.
-- Przeglądarki: Chrome, Firefox, Safari (min. ostatnie 2 wersje).
+- Przeglądarki: Chrome (min. ostatnie 2 wersje).
 
 ## 6. Narzędzia do testowania
 - Unit/integration: Vitest + Testing Library, Zod schema tests.

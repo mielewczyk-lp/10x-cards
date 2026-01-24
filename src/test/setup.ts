@@ -1,6 +1,14 @@
 import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
 
+// Mock astro:schema to use zod
+vi.mock("astro:schema", async () => {
+  const zod = await import("zod");
+  return {
+    z: zod.z,
+  };
+});
+
 // Mock environment variables
 vi.stubGlobal("import.meta", {
   env: {
