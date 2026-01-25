@@ -28,6 +28,10 @@
 - **Runtime & Package Manager**: Node.js `22.14.0` (see `.nvmrc`), npm.
 - **Backend & Auth**: Supabase (PostgreSQL, Auth, SDK).
 - **AI Integration**: OpenRouter.ai for model access (OpenAI, Anthropic, Google, etc.).
+- **Testing**: 
+  - Unit/Integration: Vitest + Testing Library, MSW (Mock Service Worker) for API mocks.
+  - E2E: Playwright for browser automation.
+  - Accessibility: Axe/Playwright-a11y for a11y validation.
 - **CI/CD & Hosting**: GitHub Actions pipelines targeting a Docker image deployed on DigitalOcean.
 
 Key dependencies and tooling live in `package.json`, including `astro`, `@astrojs/react`, `tailwindcss`, `eslint`, and `prettier`. See [.ai/tech-stack.md](.ai/tech-stack.md) for rationale.

@@ -23,7 +23,10 @@ interface State {
 
 type Action =
   | { type: "START_SESSION_REQUEST" }
-  | { type: "START_SESSION_SUCCESS"; payload: { flashcards: ReviewSessionFlashcardDto[]; nextReviewDate?: string | null } }
+  | {
+      type: "START_SESSION_SUCCESS";
+      payload: { flashcards: ReviewSessionFlashcardDto[]; nextReviewDate?: string | null };
+    }
   | { type: "START_SESSION_ERROR"; payload: string }
   | { type: "SUBMIT_ANSWER_REQUEST" }
   | { type: "SUBMIT_ANSWER_SUCCESS"; payload: { nextFlashcard: ReviewSessionFlashcardDto | null } }

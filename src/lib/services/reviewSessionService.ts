@@ -1,10 +1,6 @@
 import supermemo, { type SuperMemoItem, type SuperMemoGrade } from "supermemo";
 import type { SupabaseClient } from "../../db/supabase.client";
-import type {
-  ReviewSessionFlashcardDto,
-  StartReviewSessionResponseDto,
-  SubmitAnswerResponseDto,
-} from "../../types";
+import type { ReviewSessionFlashcardDto, StartReviewSessionResponseDto, SubmitAnswerResponseDto } from "../../types";
 
 /**
  * Error thrown when no flashcards are available for review
@@ -53,12 +49,16 @@ export class ReviewSessionService {
    * @returns Array of flashcards with their SM-2 state
    * @throws NoFlashcardsAvailableError if no flashcards are due for review
    */
-  async getFlashcardsForReview(userId: string, limit: number = 20): Promise<StartReviewSessionResponseDto> {
+  async getFlashcardsForReview(userId: string, limit = 20): Promise<StartReviewSessionResponseDto> {
     // Clamp limit to max 50
     const effectiveLimit = Math.min(limit, 50);
 
     // Fetch flashcards that are due for review (next_review_at <= NOW())
-    const { data: flashcards, error, count } = await this.supabase
+    const {
+      data: flashcards,
+      error,
+      count,
+    } = await this.supabase
       .from("flashcards")
       .select("id, front, back, sm2_interval, sm2_repetition, sm2_efactor", { count: "exact" })
       .eq("user_id", userId)

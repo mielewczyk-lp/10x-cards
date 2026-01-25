@@ -24,3 +24,9 @@ pnpm-debug.log*
 .idea/
 
 .cursorignore
+
+# test results
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
