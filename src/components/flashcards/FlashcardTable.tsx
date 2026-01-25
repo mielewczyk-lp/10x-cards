@@ -108,7 +108,7 @@ export function FlashcardTable({
   return (
     <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm" role="table">
+        <table className="w-full text-sm" role="table" data-test-id="flashcard-table">
           <thead className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
             <tr>
               <th className="text-left px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100" scope="col">
@@ -145,17 +145,22 @@ export function FlashcardTable({
               </th>
             </tr>
           </thead>
-          <tbody className={isLoading ? "opacity-50" : ""}>
-            {flashcards.map((flashcard) => (
+          <tbody className={isLoading ? "opacity-50" : ""} data-test-id="flashcard-table-body">
+            {flashcards.map((flashcard, index) => (
               <tr
                 key={flashcard.id}
                 className="border-b border-neutral-200 dark:border-neutral-800 last:border-b-0 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors"
+                data-test-id={`flashcard-row-${index}`}
               >
                 <td className="px-4 py-3 text-neutral-900 dark:text-neutral-100 max-w-xs">
-                  <div className="line-clamp-2">{flashcard.front}</div>
+                  <div className="line-clamp-2" data-test-id={`flashcard-front-${index}`}>
+                    {flashcard.front}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 max-w-xs">
-                  <div className="line-clamp-2">{flashcard.back}</div>
+                  <div className="line-clamp-2" data-test-id={`flashcard-back-${index}`}>
+                    {flashcard.back}
+                  </div>
                 </td>
                 <td className="px-4 py-3">
                   <Badge variant={getSourceBadgeVariant(flashcard.sourceType)}>
@@ -175,6 +180,7 @@ export function FlashcardTable({
                       size="sm"
                       onClick={() => onEdit(flashcard)}
                       aria-label={`Edit flashcard: ${flashcard.front}`}
+                      data-test-id={`flashcard-edit-button-${index}`}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -184,6 +190,7 @@ export function FlashcardTable({
                       onClick={() => onDelete(flashcard)}
                       className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
                       aria-label={`Delete flashcard: ${flashcard.front}`}
+                      data-test-id={`flashcard-delete-button-${index}`}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

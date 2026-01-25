@@ -25,18 +25,22 @@ export function ReviewCard({ flashcard, onShowAnswer }: ReviewCardProps) {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl mx-auto" data-testid="review-card">
       <CardHeader>
-        <CardTitle className="text-center text-lg font-medium">{showBack ? "Answer" : "Question"}</CardTitle>
+        <CardTitle className="text-center text-lg font-medium" data-testid="review-card-title">
+          {showBack ? "Answer" : "Question"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="min-h-[200px] flex items-center justify-center p-6 bg-muted rounded-lg">
-          <p className="text-xl text-center whitespace-pre-wrap">{showBack ? flashcard.back : flashcard.front}</p>
+          <p className="text-xl text-center whitespace-pre-wrap" data-testid="review-card-content">
+            {showBack ? flashcard.back : flashcard.front}
+          </p>
         </div>
 
         {!showBack && (
           <div className="flex justify-center">
-            <Button onClick={handleShowAnswer} size="lg" className="w-full max-w-xs">
+            <Button onClick={handleShowAnswer} size="lg" className="w-full max-w-xs" data-testid="show-answer-button">
               Show Answer
             </Button>
           </div>

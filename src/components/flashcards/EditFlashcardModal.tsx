@@ -159,17 +159,17 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px]" data-test-id="edit-flashcard-modal">
         <DialogHeader>
           <DialogTitle>Edit Flashcard</DialogTitle>
           <DialogDescription>Make changes to your flashcard. Click save when you're done.</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-test-id="edit-flashcard-form">
           <div className="space-y-4 py-4">
             {/* Error alert */}
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" data-test-id="edit-flashcard-error">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
@@ -189,6 +189,7 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
                 disabled={isSaving}
                 className={fieldErrors.front ? "border-red-500" : ""}
                 maxLength={200}
+                data-test-id="edit-flashcard-front-input"
               />
               {fieldErrors.front && <p className="text-sm text-red-500">{fieldErrors.front}</p>}
               <p className="text-xs text-neutral-500 dark:text-neutral-400">{front.length}/200 characters</p>
@@ -208,6 +209,7 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
                 className={fieldErrors.back ? "border-red-500" : ""}
                 rows={4}
                 maxLength={500}
+                data-test-id="edit-flashcard-back-input"
               />
               {fieldErrors.back && <p className="text-sm text-red-500">{fieldErrors.back}</p>}
               <p className="text-xs text-neutral-500 dark:text-neutral-400">{back.length}/500 characters</p>
@@ -215,10 +217,16 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onCancel} disabled={isSaving}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSaving}
+              data-test-id="edit-flashcard-cancel-button"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSaving}>
+            <Button type="submit" disabled={isSaving} data-test-id="edit-flashcard-save-button">
               {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isSaving ? "Saving..." : "Save changes"}
             </Button>
