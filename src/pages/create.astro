@@ -22,6 +22,7 @@ const tab = url.searchParams.get("tab") || "ai";
           <nav class="-mb-px flex space-x-8" aria-label="Tabs">
             <a
               href="/create?tab=ai"
+              data-test-id="tab-ai-generation"
               class={`${
                 tab === "ai"
                   ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
@@ -33,6 +34,7 @@ const tab = url.searchParams.get("tab") || "ai";
             </a>
             <a
               href="/create?tab=manual"
+              data-test-id="tab-manual-entry"
               class={`${
                 tab === "manual"
                   ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"

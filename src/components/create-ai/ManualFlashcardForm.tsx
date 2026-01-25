@@ -48,7 +48,7 @@ export default function ManualFlashcardForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" data-test-id="manual-flashcard-form">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="manual-front">
@@ -56,17 +56,19 @@ export default function ManualFlashcardForm() {
                 </Label>
                 <Textarea
                   id="manual-front"
+                  data-test-id="flashcard-front-input"
                   value={front}
                   onChange={(e) => setFront(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Enter the question or prompt..."
+                  maxLength={200}
                   className={`min-h-[150px] ${errors.front ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   aria-invalid={!!errors.front}
                   aria-describedby={errors.front ? "manual-front-error" : undefined}
                   disabled={isSubmitting}
                 />
                 {errors.front && (
-                  <p id="manual-front-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                  <p id="manual-front-error" className="text-sm text-red-600 dark:text-red-400" role="alert" data-test-id="flashcard-front-error">
                     {errors.front}
                   </p>
                 )}
@@ -78,17 +80,19 @@ export default function ManualFlashcardForm() {
                 </Label>
                 <Textarea
                   id="manual-back"
+                  data-test-id="flashcard-back-input"
                   value={back}
                   onChange={(e) => setBack(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Enter the answer or explanation..."
+                  maxLength={500}
                   className={`min-h-[150px] ${errors.back ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   aria-invalid={!!errors.back}
                   aria-describedby={errors.back ? "manual-back-error" : undefined}
                   disabled={isSubmitting}
                 />
                 {errors.back && (
-                  <p id="manual-back-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                  <p id="manual-back-error" className="text-sm text-red-600 dark:text-red-400" role="alert" data-test-id="flashcard-back-error">
                     {errors.back}
                   </p>
                 )}
@@ -96,7 +100,7 @@ export default function ManualFlashcardForm() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting || front.trim().length === 0 || back.trim().length === 0}>
+              <Button type="submit" disabled={isSubmitting || front.trim().length === 0 || back.trim().length === 0} data-test-id="save-flashcard-button">
                 {isSubmitting ? "Saving..." : "Save Flashcard"}
               </Button>
             </div>

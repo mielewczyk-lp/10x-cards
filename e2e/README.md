@@ -7,11 +7,40 @@ This directory contains end-to-end tests using Playwright.
 ```
 e2e/
 ├── fixtures/
-│   └── test.ts          # Custom test fixtures (accessibility)
+│   └── test.ts             # Custom test fixtures (accessibility)
+├── helpers/
+│   └── FlashcardGenerator.ts # Test helpers
 ├── pages/
-│   └── LoginPage.ts     # Page Object Models
-└── *.spec.ts            # Test files
+│   └── LoginPage.ts        # Page Object Models
+├── global-teardown.ts      # Global teardown (database cleanup)
+└── *.spec.ts               # Test files
 ```
+
+## Database Cleanup
+
+The test suite automatically cleans up test data after all tests complete using Playwright's `globalTeardown` configuration.
+
+### How it works
+
+1. After all tests complete, the `global-teardown.ts` script runs automatically
+2. The teardown script deletes all flashcards created by the E2E test user
+3. This ensures a clean state for subsequent test runs
+
+### Required Environment Variables
+
+Make sure your `.env.test` file includes:
+
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_anon_key
+E2E_USERNAME_ID=your_test_user_id
+E2E_USERNAME=your_test_user_email
+E2E_PASSWORD=your_test_user_password
+```
+
+The teardown uses `E2E_USERNAME_ID` to identify which flashcards to delete from the database.
+
+**Note:** The global teardown runs automatically after all tests. It cannot be viewed in the Playwright UI like regular tests, but you'll see console output confirming the cleanup.
 
 ## Page Object Model
 

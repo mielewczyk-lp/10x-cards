@@ -107,6 +107,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
             <Label htmlFor={emailId}>Email</Label>
             <Input
               id={emailId}
+              name="email"
+              data-test-id="auth-email-input"
               type="email"
               placeholder="you@example.com"
               value={email}
@@ -121,7 +123,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               aria-describedby={fieldErrors.email ? `${emailId}-error` : undefined}
             />
             {fieldErrors.email && (
-              <p id={`${emailId}-error`} className="text-sm text-red-600 dark:text-red-500">
+              <p id={`${emailId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-email-error">
                 {fieldErrors.email}
               </p>
             )}
@@ -131,6 +133,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
             <Label htmlFor={passwordId}>Password</Label>
             <Input
               id={passwordId}
+              name="password"
+              data-test-id="auth-password-input"
               type="password"
               placeholder="••••••••"
               value={password}
@@ -145,7 +149,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               aria-describedby={fieldErrors.password ? `${passwordId}-error` : undefined}
             />
             {fieldErrors.password && (
-              <p id={`${passwordId}-error`} className="text-sm text-red-600 dark:text-red-500">
+              <p id={`${passwordId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-password-error">
                 {fieldErrors.password}
               </p>
             )}
@@ -157,6 +161,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
               <Label htmlFor={confirmPasswordId}>Confirm Password</Label>
               <Input
                 id={confirmPasswordId}
+                name="confirmPassword"
+                data-test-id="auth-confirm-password-input"
                 type="password"
                 placeholder="••••••••"
                 value={confirmPassword}
@@ -171,14 +177,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 aria-describedby={fieldErrors.confirmPassword ? `${confirmPasswordId}-error` : undefined}
               />
               {fieldErrors.confirmPassword && (
-                <p id={`${confirmPasswordId}-error`} className="text-sm text-red-600 dark:text-red-500">
+                <p id={`${confirmPasswordId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-confirm-password-error">
                   {fieldErrors.confirmPassword}
                 </p>
               )}
             </div>
           )}
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading} data-test-id="auth-submit-button">
             {isLoading ? "Processing..." : isRegister ? "Create Account" : "Sign In"}
           </Button>
         </form>
