@@ -20,9 +20,9 @@ export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps
       <Button
         onClick={() => onAnswer(0)}
         disabled={disabled}
-        variant="destructive"
+        variant="outline"
         size="lg"
-        className="w-full"
+        className="w-full border-red-500 text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950"
         aria-label="Again - I forgot completely"
         data-testid="answer-button-again"
       >
