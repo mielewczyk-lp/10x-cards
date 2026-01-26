@@ -1,13 +1,11 @@
 /*
- * Type System Index (Legacy Entry Point)
+ * Type System Index
  *
- * This file maintains backward compatibility for existing imports.
- * All types have been organized into domain-specific modules in ./types/
- *
- * @deprecated Use direct imports from ./types/ subdirectories for better clarity.
- * Example: import type { FlashcardDto } from "./types/flashcards.types"
+ * Central re-export point for all application types.
+ * This file maintains backward compatibility with existing imports from "@/types".
  */
 
+// Entity aliases
 export type {
   FlashcardEntity,
   FlashcardInsert,
@@ -15,11 +13,19 @@ export type {
   GenerationSourceEntity,
   GenerationSourceInsert,
   GenerationSourceUpdate,
+} from "./entities";
+
+// Common types
+export type {
   FlashcardSourceType,
   FlashcardSortOption,
   GenerationSourceSortOption,
   SortOrder,
   ErrorResponseDto,
+} from "./common.types";
+
+// Generation sources
+export type {
   CreateGenerationSourceCommand,
   UpdateGenerationSourceCommand,
   FlashcardCandidateDto,
@@ -30,6 +36,10 @@ export type {
   PaginatedGenerationSourcesDto,
   ErrorLogDto,
   ErrorLogsResponseDto,
+} from "./generation-sources.types";
+
+// Flashcards
+export type {
   CreateFlashcardCommand,
   UpdateFlashcardCommand,
   StartPracticeCommand,
@@ -38,6 +48,10 @@ export type {
   PaginatedFlashcardsDto,
   PracticeFlashcardDto,
   StartPracticeResponseDto,
+} from "./flashcards.types";
+
+// Stats
+export type {
   AIAcceptanceRateDto,
   AIFlashcardShareDto,
   StatsResponseDto,
@@ -45,10 +59,14 @@ export type {
   DueCardsDto,
   TotalCardsDto,
   LearningStatsResponseDto,
+} from "./stats.types";
+
+// Review sessions
+export type {
   StartReviewSessionCommand,
   SubmitAnswerCommand,
   SM2State,
   ReviewSessionFlashcardDto,
   StartReviewSessionResponseDto,
   SubmitAnswerResponseDto,
-} from "./types/index";
+} from "./review-sessions.types";
