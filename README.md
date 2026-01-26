@@ -9,9 +9,10 @@
 - [3. Tech Stack](#3-tech-stack)
 - [4. Getting Started Locally](#4-getting-started-locally)
 - [5. Available Scripts](#5-available-scripts)
-- [6. Project Scope](#6-project-scope)
-- [7. Project Status](#7-project-status)
-- [8. License](#8-license)
+- [6. Deployment](#6-deployment)
+- [7. Project Scope](#7-project-scope)
+- [8. Project Status](#8-project-status)
+- [9. License](#9-license)
 
 ## 1. Project Name
 
@@ -32,7 +33,7 @@
   - Unit/Integration: Vitest + Testing Library, MSW (Mock Service Worker) for API mocks.
   - E2E: Playwright for browser automation.
   - Accessibility: Axe/Playwright-a11y for a11y validation.
-- **CI/CD & Hosting**: GitHub Actions pipelines targeting a Docker image deployed on DigitalOcean.
+- **CI/CD & Hosting**: GitHub Actions pipelines deploying to Cloudflare Pages (SSR with `@astrojs/cloudflare`).
 
 Key dependencies and tooling live in `package.json`, including `astro`, `@astrojs/react`, `tailwindcss`, `eslint`, and `prettier`. See [.ai/tech-stack.md](.ai/tech-stack.md) for rationale.
 
@@ -68,7 +69,37 @@ Key dependencies and tooling live in `package.json`, including `astro`, `@astroj
 | `npm run lint:fix` | Lint and auto-fix issues when possible.              |
 | `npm run format`   | Format files with Prettier (Astro support included). |
 
-## 6. Project Scope
+## 6. Deployment
+
+The app deploys automatically to Cloudflare Pages on every push to `main` via GitHub Actions.
+
+### Required GitHub Secrets
+
+Configure in **Settings → Secrets and variables → Actions**:
+
+- `CLOUDFLARE_API_TOKEN` - Create at [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) with **Cloudflare Pages Edit** permissions
+- `CLOUDFLARE_ACCOUNT_ID` - Found in Cloudflare Dashboard URL or sidebar
+- `CLOUDFLARE_PROJECT_NAME` - Your Cloudflare Pages project name
+- `SUPABASE_URL` - Supabase project URL
+- `SUPABASE_KEY` - Supabase anonymous key
+- `OPENROUTER_API_KEY` - OpenRouter API key
+
+### Cloudflare Pages Environment Variables
+
+After first deployment, add these in **Cloudflare Dashboard → Pages → Settings → Environment variables**:
+
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `OPENROUTER_API_KEY`
+
+### Local Testing
+
+```bash
+npm run build
+npx wrangler pages dev dist
+```
+
+## 7. Project Scope
 
 - Desktop and mobile web experience for a single persona.
 - AI and manual flashcard authoring, review workflow, Supabase persistence.
@@ -76,10 +107,10 @@ Key dependencies and tooling live in `package.json`, including `astro`, `@astroj
 - Spaced-repetition sessions powered by an external library.
 - KPI logging directly in the database—no third-party analytics.
 
-## 7. Project Status
+## 8. Project Status
 
 - MVP is in active development (version `0.0.1`).
 
-## 8. License
+## 9. License
 
 License terms have not been finalized yet. Until a license file is added, assume all rights reserved by the project owners.
