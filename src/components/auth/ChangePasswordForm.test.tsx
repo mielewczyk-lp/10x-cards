@@ -35,8 +35,9 @@ describe("ChangePasswordForm", () => {
 
       await waitFor(() => {
         // Should show password validation error
-        const hasError = screen.queryByText(/password must be at least 8 characters/i) ||
-                        screen.queryByText(/password must contain at least one/i);
+        const hasError =
+          screen.queryByText(/password must be at least 8 characters/i) ||
+          screen.queryByText(/password must contain at least one/i);
         expect(hasError).toBeInTheDocument();
       });
       expect(mockFetch).not.toHaveBeenCalled();
@@ -163,8 +164,9 @@ describe("ChangePasswordForm", () => {
       await user.click(screen.getByRole("button", { name: /update password/i }));
 
       await waitFor(() => {
-        const hasError = screen.queryByText(/password must be at least 8 characters/i) ||
-                        screen.queryByText(/password must contain at least one/i);
+        const hasError =
+          screen.queryByText(/password must be at least 8 characters/i) ||
+          screen.queryByText(/password must contain at least one/i);
         expect(hasError).toBeInTheDocument();
       });
 

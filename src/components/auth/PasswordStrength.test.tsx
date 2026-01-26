@@ -49,7 +49,7 @@ describe("PasswordStrength", () => {
   describe("Business Rule: Character variety requirements", () => {
     it("should highlight requirements checklist based on password content", () => {
       render(<PasswordStrength password="Pass123" />);
-      
+
       expect(screen.getByText("At least 8 characters")).not.toHaveClass("text-green-600"); // 7 chars
       expect(screen.getByText("Contains a letter")).toHaveClass("text-green-600");
       expect(screen.getByText("Contains a number")).toHaveClass("text-green-600");

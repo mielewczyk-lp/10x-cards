@@ -104,7 +104,7 @@ export function ReviewSessionPanel() {
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-semibold">Session Complete!</h2>
           <p className="text-muted-foreground">
-            You've reviewed {progress.reviewed} flashcard{progress.reviewed !== 1 ? "s" : ""}.
+            You&apos;ve reviewed {progress.reviewed} flashcard{progress.reviewed !== 1 ? "s" : ""}.
           </p>
           <Button onClick={handleNavigateToFlashcards} size="lg">
             Back to Flashcards

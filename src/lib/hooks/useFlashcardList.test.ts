@@ -160,6 +160,7 @@ describe("useFlashcardList", () => {
   describe("401 redirect to login", () => {
     it("should redirect to login on 401", async () => {
       const originalLocation = window.location;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (window as any).location;
       window.location = { ...originalLocation, href: "" } as Location;
 

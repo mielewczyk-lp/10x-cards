@@ -43,7 +43,7 @@ export class ReviewPage {
    */
   async waitForSession() {
     await this.page.waitForLoadState("networkidle");
-    
+
     // Wait for API call to review-sessions to complete
     try {
       await this.page.waitForResponse(
@@ -53,7 +53,7 @@ export class ReviewPage {
     } catch {
       // API might have already completed before we started waiting
     }
-    
+
     // Give React more time to render the response
     await this.page.waitForTimeout(2000);
   }

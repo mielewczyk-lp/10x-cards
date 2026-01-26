@@ -20,8 +20,8 @@ describe("ForgotPasswordForm", () => {
 
       await waitFor(() => {
         // Empty email triggers browser validation or Zod validation
-        const hasError = screen.queryByText(/email is required/i) ||
-                        screen.queryByText(/please enter a valid email address/i);
+        const hasError =
+          screen.queryByText(/email is required/i) || screen.queryByText(/please enter a valid email address/i);
         expect(hasError).toBeInTheDocument();
       });
       expect(mockFetch).not.toHaveBeenCalled();
@@ -31,9 +31,9 @@ describe("ForgotPasswordForm", () => {
       const user = userEvent.setup();
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ 
+        json: async () => ({
           error: "VALIDATION_ERROR",
-          details: [{ path: ["email"], message: "EMAIL_INVALID" }]
+          details: [{ path: ["email"], message: "EMAIL_INVALID" }],
         }),
       });
 
@@ -132,6 +132,7 @@ describe("ForgotPasswordForm", () => {
       expect(screen.getByLabelText(/email/i)).toBeDisabled();
 
       // Clean up
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       resolvePromise!();
     });
   });

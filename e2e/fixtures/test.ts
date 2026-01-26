@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { test as base } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { LoginPage } from "../pages/LoginPage";
@@ -5,16 +6,16 @@ import { LoginPage } from "../pages/LoginPage";
 // Extend base test with custom fixtures
 interface CustomFixtures {
   makeAxeBuilder: () => AxeBuilder;
-  authenticatedPage: void;
+  authenticatedPage: Promise<void>;
 }
 
 export const test = base.extend<CustomFixtures>({
   makeAxeBuilder: async ({ page }, use) => {
     const createAxeBuilder = () => new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(createAxeBuilder);
   },
 
+  // Playwright fixture function - "use" is not a React hook
   authenticatedPage: async ({ page }, use) => {
     const email = process.env.E2E_USERNAME;
     const password = process.env.E2E_PASSWORD;

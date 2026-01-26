@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  CreateGenerationSourceSchema,
-  UpdateGenerationSourceSchema,
-} from "./generationSourceSchemas";
+import { CreateGenerationSourceSchema, UpdateGenerationSourceSchema } from "./generationSourceSchemas";
 
 describe("CreateGenerationSourceSchema", () => {
   describe("inputText validation", () => {

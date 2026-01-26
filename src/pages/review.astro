@@ -5,9 +5,6 @@ import { FreeLearningPanel } from "@/components/review/FreeLearningPanel";
 
 export const prerender = false;
 
-// Protected page - user must be logged in (enforced by middleware)
-const { user } = Astro.locals;
-
 // Check mode from query parameter
 const mode = Astro.url.searchParams.get("mode") || "review";
 const isFreeMode = mode === "free";

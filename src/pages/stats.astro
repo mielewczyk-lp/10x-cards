@@ -5,9 +5,6 @@ import LearningStatsPanel from "@/components/stats/LearningStatsPanel";
 
 export const prerender = false;
 
-// Protected page - user must be logged in (enforced by middleware)
-const { user } = Astro.locals;
-
 const url = new URL(Astro.request.url);
 const tab = url.searchParams.get("tab") || "ai";
 ---

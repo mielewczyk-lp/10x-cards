@@ -17,7 +17,7 @@ describe("AuthForm", () => {
   describe("Business Rule: Mode switching (login vs register)", () => {
     it("should show email and password fields in login mode", () => {
       render(<AuthForm mode="login" />);
-      
+
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
       expect(screen.queryByLabelText(/confirm password/i)).not.toBeInTheDocument();
@@ -26,7 +26,7 @@ describe("AuthForm", () => {
 
     it("should show confirm password field in register mode", () => {
       render(<AuthForm mode="register" />);
-      
+
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument();
@@ -42,14 +42,15 @@ describe("AuthForm", () => {
       const emailInput = screen.getByLabelText(/email/i);
       await user.clear(emailInput);
       await user.type(emailInput, "invalid");
-      
+
       // Trigger validation by trying to submit
       await user.click(screen.getByRole("button", { name: /sign in/i }));
 
       // Should show validation error eventually (client or server-side)
       await waitFor(() => {
-        const hasError = screen.queryByText(/please enter a valid email address/i) !== null ||
-                        screen.queryByText(/email is required/i) !== null;
+        const hasError =
+          screen.queryByText(/please enter a valid email address/i) !== null ||
+          screen.queryByText(/email is required/i) !== null;
         expect(hasError || mockFetch).toBeTruthy();
       });
     });
@@ -65,8 +66,9 @@ describe("AuthForm", () => {
 
       await waitFor(() => {
         // Should show password validation error
-        const hasError = screen.queryByText(/password must be at least 8 characters/i) ||
-                        screen.queryByText(/password must contain at least one/i);
+        const hasError =
+          screen.queryByText(/password must be at least 8 characters/i) ||
+          screen.queryByText(/password must contain at least one/i);
         expect(hasError).toBeInTheDocument();
       });
       expect(mockFetch).not.toHaveBeenCalled();
@@ -185,6 +187,7 @@ describe("AuthForm", () => {
       expect(screen.getByLabelText(/^password$/i)).toBeDisabled();
 
       // Clean up
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       resolvePromise!();
     });
   });

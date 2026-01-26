@@ -24,6 +24,7 @@ const currentPath = new URL(Astro.request.url).pathname;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <script is:inline>
+      // eslint-disable-next-line prettier/prettier
       // Prevent theme flash on page load
       (function () {
         const storageKey = "10x-cards-theme";

@@ -3,10 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import PasswordStrength from "./PasswordStrength";
 import { LoginSchema, RegisterSchema, getAuthErrorMessage } from "@/lib/validation/authSchemas";
-import type { LoginInput, RegisterInput } from "@/lib/validation/authSchemas";
 
 interface AuthFormProps {
   mode: "login" | "register";
@@ -123,7 +121,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
               aria-describedby={fieldErrors.email ? `${emailId}-error` : undefined}
             />
             {fieldErrors.email && (
-              <p id={`${emailId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-email-error">
+              <p
+                id={`${emailId}-error`}
+                className="text-sm text-red-600 dark:text-red-500"
+                data-test-id="auth-email-error"
+              >
                 {fieldErrors.email}
               </p>
             )}
@@ -149,7 +151,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
               aria-describedby={fieldErrors.password ? `${passwordId}-error` : undefined}
             />
             {fieldErrors.password && (
-              <p id={`${passwordId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-password-error">
+              <p
+                id={`${passwordId}-error`}
+                className="text-sm text-red-600 dark:text-red-500"
+                data-test-id="auth-password-error"
+              >
                 {fieldErrors.password}
               </p>
             )}
@@ -177,7 +183,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 aria-describedby={fieldErrors.confirmPassword ? `${confirmPasswordId}-error` : undefined}
               />
               {fieldErrors.confirmPassword && (
-                <p id={`${confirmPasswordId}-error`} className="text-sm text-red-600 dark:text-red-500" data-test-id="auth-confirm-password-error">
+                <p
+                  id={`${confirmPasswordId}-error`}
+                  className="text-sm text-red-600 dark:text-red-500"
+                  data-test-id="auth-confirm-password-error"
+                >
                   {fieldErrors.confirmPassword}
                 </p>
               )}

@@ -63,7 +63,8 @@ export class LoginPage {
 
     if (!emailValue || !passwordValue) {
       throw new Error(
-        `Fields not filled correctly before submit. ` + `Email: "${emailValue}", Password length: ${passwordValue.length}`
+        `Fields not filled correctly before submit. ` +
+          `Email: "${emailValue}", Password length: ${passwordValue.length}`
       );
     }
 

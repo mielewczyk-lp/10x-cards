@@ -78,9 +78,7 @@ describe("useReviewSession", () => {
 
     it("should end session when no more flashcards", async () => {
       const mockStartResponse: StartReviewSessionResponseDto = {
-        flashcards: [
-          { id: "1", front: "Q1", back: "A1", sm2State: { interval: 1, repetition: 0, efactor: 2.5 } },
-        ],
+        flashcards: [{ id: "1", front: "Q1", back: "A1", sm2State: { interval: 1, repetition: 0, efactor: 2.5 } }],
         total: 1,
       };
 

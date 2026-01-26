@@ -47,10 +47,10 @@ test.describe("Flashcard Management", () => {
     await expect(flashcardElement).toBeVisible();
 
     // STEP 3: Click edit button for this flashcard (find by text, then find edit button in same row)
-    const row = page.locator('tr', { has: page.getByText(flashcard.front) }).first();
-    const editButton = row.getByRole('button', { name: /edit/i });
+    const row = page.locator("tr", { has: page.getByText(flashcard.front) }).first();
+    const editButton = row.getByRole("button", { name: /edit/i });
     await editButton.click();
-    
+
     await editModal.waitForModal();
     expect(await editModal.isVisible()).toBe(true);
 
@@ -67,8 +67,8 @@ test.describe("Flashcard Management", () => {
     await expect(editedElement).toBeVisible();
 
     // STEP 6: Delete the flashcard
-    const editedRow = page.locator('tr', { has: page.getByText(newFront) }).first();
-    const deleteButton = editedRow.getByRole('button', { name: /delete/i });
+    const editedRow = page.locator("tr", { has: page.getByText(newFront) }).first();
+    const deleteButton = editedRow.getByRole("button", { name: /delete/i });
     await deleteButton.click();
 
     await deleteDialog.waitForDialog();
@@ -99,8 +99,8 @@ test.describe("Flashcard Management", () => {
     await expect(page.getByText(flashcard.front).first()).toBeVisible();
 
     // Click edit
-    const row = page.locator('tr', { has: page.getByText(flashcard.front) }).first();
-    const editButton = row.getByRole('button', { name: /edit/i });
+    const row = page.locator("tr", { has: page.getByText(flashcard.front) }).first();
+    const editButton = row.getByRole("button", { name: /edit/i });
     await editButton.click();
     await editModal.waitForModal();
 
@@ -129,8 +129,8 @@ test.describe("Flashcard Management", () => {
     await expect(page.getByText(flashcard.front).first()).toBeVisible();
 
     // Click delete
-    const row = page.locator('tr', { has: page.getByText(flashcard.front) }).first();
-    const deleteButton = row.getByRole('button', { name: /delete/i });
+    const row = page.locator("tr", { has: page.getByText(flashcard.front) }).first();
+    const deleteButton = row.getByRole("button", { name: /delete/i });
     await deleteButton.click();
     await deleteDialog.waitForDialog();
 
@@ -155,8 +155,8 @@ test.describe("Flashcard Management", () => {
     await expect(page.getByText(flashcard.front).first()).toBeVisible();
 
     // Click edit
-    const row = page.locator('tr', { has: page.getByText(flashcard.front) }).first();
-    const editButton = row.getByRole('button', { name: /edit/i });
+    const row = page.locator("tr", { has: page.getByText(flashcard.front) }).first();
+    const editButton = row.getByRole("button", { name: /edit/i });
     await editButton.click();
     await editModal.waitForModal();
 
@@ -190,22 +190,22 @@ test.describe("Flashcard Management", () => {
     await expect(page.getByText(flashcards[1].front).first()).toBeVisible();
 
     // Edit first flashcard
-    const row1 = page.locator('tr', { has: page.getByText(flashcards[0].front) }).first();
-    const editButton1 = row1.getByRole('button', { name: /edit/i });
+    const row1 = page.locator("tr", { has: page.getByText(flashcards[0].front) }).first();
+    const editButton1 = row1.getByRole("button", { name: /edit/i });
     await editButton1.click();
     await editModal.waitForModal();
-    
+
     const newFront1 = "Edited First";
     await editModal.fillFront(newFront1);
     await editModal.save();
     await page.waitForTimeout(300);
 
     // Edit second flashcard
-    const row2 = page.locator('tr', { has: page.getByText(flashcards[1].front) }).first();
-    const editButton2 = row2.getByRole('button', { name: /edit/i });
+    const row2 = page.locator("tr", { has: page.getByText(flashcards[1].front) }).first();
+    const editButton2 = row2.getByRole("button", { name: /edit/i });
     await editButton2.click();
     await editModal.waitForModal();
-    
+
     const newFront2 = "Edited Second";
     await editModal.fillFront(newFront2);
     await editModal.save();
@@ -216,8 +216,8 @@ test.describe("Flashcard Management", () => {
     await expect(page.getByText(newFront2).first()).toBeVisible();
 
     // Delete second flashcard
-    const editedRow2 = page.locator('tr', { has: page.getByText(newFront2) }).first();
-    const deleteButton2 = editedRow2.getByRole('button', { name: /delete/i });
+    const editedRow2 = page.locator("tr", { has: page.getByText(newFront2) }).first();
+    const deleteButton2 = editedRow2.getByRole("button", { name: /delete/i });
     await deleteButton2.click();
     await deleteDialog.waitForDialog();
     await deleteDialog.confirm();

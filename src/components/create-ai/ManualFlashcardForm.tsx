@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useManualFlashcardCreation } from "@/lib/hooks/useManualFlashcardCreation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,7 +68,12 @@ export default function ManualFlashcardForm() {
                   disabled={isSubmitting}
                 />
                 {errors.front && (
-                  <p id="manual-front-error" className="text-sm text-red-600 dark:text-red-400" role="alert" data-test-id="flashcard-front-error">
+                  <p
+                    id="manual-front-error"
+                    className="text-sm text-red-600 dark:text-red-400"
+                    role="alert"
+                    data-test-id="flashcard-front-error"
+                  >
                     {errors.front}
                   </p>
                 )}
@@ -92,7 +97,12 @@ export default function ManualFlashcardForm() {
                   disabled={isSubmitting}
                 />
                 {errors.back && (
-                  <p id="manual-back-error" className="text-sm text-red-600 dark:text-red-400" role="alert" data-test-id="flashcard-back-error">
+                  <p
+                    id="manual-back-error"
+                    className="text-sm text-red-600 dark:text-red-400"
+                    role="alert"
+                    data-test-id="flashcard-back-error"
+                  >
                     {errors.back}
                   </p>
                 )}
@@ -100,7 +110,11 @@ export default function ManualFlashcardForm() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting || front.trim().length === 0 || back.trim().length === 0} data-test-id="save-flashcard-button">
+              <Button
+                type="submit"
+                disabled={isSubmitting || front.trim().length === 0 || back.trim().length === 0}
+                data-test-id="save-flashcard-button"
+              >
                 {isSubmitting ? "Saving..." : "Save Flashcard"}
               </Button>
             </div>

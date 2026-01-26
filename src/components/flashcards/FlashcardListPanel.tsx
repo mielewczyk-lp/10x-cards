@@ -38,7 +38,6 @@ export default function FlashcardListPanel() {
     setSearchQuery,
     deleteFlashcard,
     updateFlashcard,
-    refreshList,
   } = useFlashcardList();
 
   // Modal and dialog state
@@ -84,7 +83,7 @@ export default function FlashcardListPanel() {
     try {
       await deleteFlashcard(deletingFlashcard.id);
       setDeletingFlashcard(null);
-    } catch (err) {
+    } catch {
       // Error is already handled in the hook
       // Dialog will stay open to let user retry
     }

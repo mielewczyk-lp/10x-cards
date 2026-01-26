@@ -367,12 +367,7 @@ describe("Error Hierarchy", () => {
   });
 
   it("can catch all OpenRouter errors with base class", () => {
-    const errors = [
-      new AuthenticationError(),
-      new ValidationError("Test"),
-      new TimeoutError(),
-      new RateLimitError(),
-    ];
+    const errors = [new AuthenticationError(), new ValidationError("Test"), new TimeoutError(), new RateLimitError()];
 
     errors.forEach((error) => {
       try {
