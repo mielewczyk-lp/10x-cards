@@ -15,7 +15,7 @@ export interface FlashcardGenerationConfig {
  * Default configuration for flashcard generation
  */
 const DEFAULT_CONFIG: FlashcardGenerationConfig = {
-  model: "google/gemini-2.0-flash-exp:free",
+  model: "google/gemma-3-27b-it:free",
   temperature: 0.7,
   maxTokens: 2048,
 };
