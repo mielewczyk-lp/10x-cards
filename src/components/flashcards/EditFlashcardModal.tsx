@@ -141,7 +141,8 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
     setFront(e.target.value);
     if (fieldErrors.front) {
       setFieldErrors((prev) => {
-        const { front, ...rest } = prev;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { front: _front, ...rest } = prev;
         return rest;
       });
     }
@@ -151,7 +152,8 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
     setBack(e.target.value);
     if (fieldErrors.back) {
       setFieldErrors((prev) => {
-        const { back, ...rest } = prev;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { back: _back, ...rest } = prev;
         return rest;
       });
     }
@@ -162,7 +164,7 @@ export function EditFlashcardModal({ flashcard, onSave, onCancel }: EditFlashcar
       <DialogContent className="sm:max-w-[600px]" data-test-id="edit-flashcard-modal">
         <DialogHeader>
           <DialogTitle>Edit Flashcard</DialogTitle>
-          <DialogDescription>Make changes to your flashcard. Click save when you're done.</DialogDescription>
+          <DialogDescription>Make changes to your flashcard. Click save when you&apos;re done.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} data-test-id="edit-flashcard-form">

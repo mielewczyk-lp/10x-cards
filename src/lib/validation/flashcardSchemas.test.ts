@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  CreateFlashcardSchema,
-  CreateFlashcardsSchema,
-  StartPracticeSchema,
-} from "./flashcardSchemas";
+import { CreateFlashcardSchema, CreateFlashcardsSchema, StartPracticeSchema } from "./flashcardSchemas";
 
 describe("CreateFlashcardSchema", () => {
   describe("front field validation", () => {
@@ -117,7 +113,7 @@ describe("CreateFlashcardSchema", () => {
   describe("sourceType field validation", () => {
     it("accepts all valid source types", () => {
       const types = ["ai-full", "ai-edited", "manual"] as const;
-      
+
       types.forEach((sourceType) => {
         const data = {
           front: "Question",
@@ -289,7 +285,7 @@ describe("StartPracticeSchema", () => {
 
   it("rejects limit not in allowed values (10, 20, 50)", () => {
     const invalidLimits = [5, 15, 30, 100];
-    
+
     invalidLimits.forEach((limit) => {
       const result = StartPracticeSchema.safeParse({ limit });
       expect(result.success).toBe(false);

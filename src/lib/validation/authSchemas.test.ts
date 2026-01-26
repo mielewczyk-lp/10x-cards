@@ -149,9 +149,7 @@ describe("RegisterSchema", () => {
       const result = RegisterSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        const confirmPasswordError = result.error.issues.find(
-          (i) => i.path.includes("confirmPassword")
-        );
+        const confirmPasswordError = result.error.issues.find((i) => i.path.includes("confirmPassword"));
         expect(confirmPasswordError?.message).toBe("PASSWORDS_DO_NOT_MATCH");
       }
     });
@@ -234,9 +232,7 @@ describe("ChangePasswordSchema", () => {
     const result = ChangePasswordSchema.safeParse(data);
     expect(result.success).toBe(false);
     if (!result.success) {
-      const confirmError = result.error.issues.find((i) =>
-        i.path.includes("confirmNewPassword")
-      );
+      const confirmError = result.error.issues.find((i) => i.path.includes("confirmNewPassword"));
       expect(confirmError?.message).toBe("PASSWORDS_DO_NOT_MATCH");
     }
   });
@@ -308,9 +304,7 @@ describe("ResetPasswordSchema", () => {
     const result = ResetPasswordSchema.safeParse(data);
     expect(result.success).toBe(false);
     if (!result.success) {
-      const confirmError = result.error.issues.find((i) =>
-        i.path.includes("confirmPassword")
-      );
+      const confirmError = result.error.issues.find((i) => i.path.includes("confirmPassword"));
       expect(confirmError?.message).toBe("PASSWORDS_DO_NOT_MATCH");
     }
   });
@@ -318,24 +312,14 @@ describe("ResetPasswordSchema", () => {
 
 describe("getAuthErrorMessage", () => {
   it("returns correct message for password validation errors", () => {
-    expect(getAuthErrorMessage("PASSWORD_TOO_SHORT")).toBe(
-      "Password must be at least 8 characters long"
-    );
-    expect(getAuthErrorMessage("PASSWORD_MISSING_LETTER")).toBe(
-      "Password must contain at least one letter"
-    );
-    expect(getAuthErrorMessage("PASSWORD_MISSING_NUMBER")).toBe(
-      "Password must contain at least one number"
-    );
+    expect(getAuthErrorMessage("PASSWORD_TOO_SHORT")).toBe("Password must be at least 8 characters long");
+    expect(getAuthErrorMessage("PASSWORD_MISSING_LETTER")).toBe("Password must contain at least one letter");
+    expect(getAuthErrorMessage("PASSWORD_MISSING_NUMBER")).toBe("Password must contain at least one number");
   });
 
   it("returns correct message for authentication errors", () => {
-    expect(getAuthErrorMessage("INVALID_CREDENTIALS")).toBe(
-      "Invalid email or password"
-    );
-    expect(getAuthErrorMessage("PASSWORDS_DO_NOT_MATCH")).toBe(
-      "Passwords do not match"
-    );
+    expect(getAuthErrorMessage("INVALID_CREDENTIALS")).toBe("Invalid email or password");
+    expect(getAuthErrorMessage("PASSWORDS_DO_NOT_MATCH")).toBe("Passwords do not match");
   });
 
   it("returns default message for unknown error code", () => {

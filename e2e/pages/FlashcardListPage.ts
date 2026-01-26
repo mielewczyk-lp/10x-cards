@@ -34,10 +34,10 @@ export class FlashcardListPage {
   async isVisible() {
     // Wait for page load and React hydration
     await this.page.waitForLoadState("networkidle");
-    
+
     // Give time for React to render and API to respond
     await this.page.waitForTimeout(1000);
-    
+
     return true;
   }
 
@@ -93,9 +93,9 @@ export class FlashcardListPage {
     } catch {
       return 0; // No flashcards
     }
-    
+
     // Count table rows using tbody > tr selector
-    const rowCount = await this.flashcardTableBody.locator('tr').count();
+    const rowCount = await this.flashcardTableBody.locator("tr").count();
     return rowCount;
   }
 

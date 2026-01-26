@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useFreeLearning } from "@/lib/hooks/useFreeLearning";
 import { ReviewCard } from "./ReviewCard";
 import { ReviewProgress } from "./ReviewProgress";
-import { ReviewEmptyState } from "./ReviewEmptyState";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -149,7 +148,7 @@ export function FreeLearningPanel() {
       <Card className="w-full max-w-2xl mx-auto">
         <CardContent className="py-8">
           <div className="text-center space-y-4">
-            <p className="text-muted-foreground">You don't have any flashcards yet.</p>
+            <p className="text-muted-foreground">You don&apos;t have any flashcards yet.</p>
             <div className="flex gap-3 justify-center pt-4">
               <Button onClick={() => setHasStarted(false)} variant="outline" size="lg">
                 Back
@@ -179,7 +178,7 @@ export function FreeLearningPanel() {
               </div>
               <h2 className="text-2xl font-semibold">Practice Complete!</h2>
               <p className="text-muted-foreground">
-                You've practiced {progress.completed} flashcard{progress.completed !== 1 ? "s" : ""}.
+                You&apos;ve practiced {progress.completed} flashcard{progress.completed !== 1 ? "s" : ""}.
               </p>
               <div className="flex gap-3 justify-center pt-4">
                 <Button onClick={() => setHasStarted(false)} variant="outline" size="lg">

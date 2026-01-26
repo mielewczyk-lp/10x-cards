@@ -3,9 +3,6 @@ import Layout from "@/layouts/Layout.astro";
 import LogsPanel from "@/components/logs/LogsPanel";
 
 export const prerender = false;
-
-// Protected page - user must be logged in (enforced by middleware)
-const { user } = Astro.locals;
 ---
 
 <Layout title="Error Logs">

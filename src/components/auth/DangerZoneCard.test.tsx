@@ -171,6 +171,7 @@ describe("DangerZoneCard", () => {
       expect(screen.getByRole("button", { name: /cancel/i })).toBeDisabled();
 
       // Clean up
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       resolvePromise!();
     });
   });

@@ -36,7 +36,7 @@ export default function LogsPanel() {
     try {
       await deleteErrorLog(deletingErrorLog.id);
       setDeletingErrorLog(null);
-    } catch (err) {
+    } catch {
       // Error is already handled in the hook
       // Dialog will stay open to let user retry
     }

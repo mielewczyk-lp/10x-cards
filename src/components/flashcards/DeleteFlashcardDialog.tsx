@@ -76,7 +76,10 @@ export function DeleteFlashcardDialog({ flashcard, onConfirm, onCancel }: Delete
           {/* Flashcard preview */}
           <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 bg-neutral-50 dark:bg-neutral-900">
             <div className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Front:</div>
-            <div className="text-neutral-900 dark:text-neutral-100 line-clamp-2" data-test-id="delete-flashcard-preview">
+            <div
+              className="text-neutral-900 dark:text-neutral-100 line-clamp-2"
+              data-test-id="delete-flashcard-preview"
+            >
               {flashcard.front}
             </div>
           </div>

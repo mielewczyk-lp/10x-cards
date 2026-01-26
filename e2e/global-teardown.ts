@@ -34,7 +34,7 @@ async function globalTeardown() {
     }
 
     // First, check how many flashcards exist for this user
-    const { data: existingFlashcards, error: countError } = await supabase
+    const { error: countError } = await supabase
       .from("flashcards")
       .select("id", { count: "exact", head: false })
       .eq("user_id", e2eUserId);

@@ -24,8 +24,9 @@ describe("ResetPasswordForm", () => {
 
       await waitFor(() => {
         // Should show validation error for password requirements
-        const hasError = screen.queryByText(/password must be at least 8 characters/i) ||
-                        screen.queryByText(/password must contain at least one/i);
+        const hasError =
+          screen.queryByText(/password must be at least 8 characters/i) ||
+          screen.queryByText(/password must contain at least one/i);
         expect(hasError).toBeInTheDocument();
       });
       expect(mockFetch).not.toHaveBeenCalled();
@@ -124,8 +125,9 @@ describe("ResetPasswordForm", () => {
       await user.click(screen.getByRole("button", { name: /reset password/i }));
 
       await waitFor(() => {
-        const hasError = screen.queryByText(/password must be at least 8 characters/i) ||
-                        screen.queryByText(/password must contain at least one/i);
+        const hasError =
+          screen.queryByText(/password must be at least 8 characters/i) ||
+          screen.queryByText(/password must contain at least one/i);
         expect(hasError).toBeInTheDocument();
       });
 
@@ -154,6 +156,7 @@ describe("ResetPasswordForm", () => {
       expect(screen.getByLabelText(/confirm new password/i)).toBeDisabled();
 
       // Clean up
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       resolvePromise!();
     });
   });

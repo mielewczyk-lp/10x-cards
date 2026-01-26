@@ -25,7 +25,7 @@ export function CandidateList({ candidates, onUpdateCandidate }: CandidateListPr
         <p className="text-sm text-neutral-500 dark:text-neutral-400">Showing {candidates.length} candidates</p>
       )}
 
-      <ul className="space-y-3" role="list">
+      <ul className="space-y-3">
         {candidates.map((candidate) => (
           <li key={candidate.id}>
             <CandidateItem candidate={candidate} onUpdateCandidate={onUpdateCandidate} />

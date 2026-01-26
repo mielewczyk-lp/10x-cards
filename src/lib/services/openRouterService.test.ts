@@ -5,10 +5,9 @@ import {
   AuthenticationError,
   RateLimitError,
   SchemaValidationError,
-  TimeoutError,
   ValidationError,
 } from "../errors/openRouterErrors";
-import type { ChatCompletionOptions, LLMResponse, ResponseFormat } from "./openRouterService.types";
+import type { ChatCompletionOptions, LLMResponse } from "./openRouterService.types";
 import { createFlashcardResponseFormat } from "./openRouterService.types";
 
 // =============================================================================
@@ -134,6 +133,7 @@ describe("OpenRouterService - Input Validation (US-003, US-004)", () => {
       expect(error).toBeInstanceOf(ValidationError);
       if (error instanceof ValidationError) {
         expect(error.fields).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expect(Object.keys(error.fields!).length).toBeGreaterThan(0);
       }
     }
@@ -238,7 +238,7 @@ describe("OpenRouterService - Success Scenarios (US-004)", () => {
     });
 
     const options = createValidOptions();
-    const result: LLMResponse<{ flashcards: Array<{ front: string; back: string }> }> =
+    const result: LLMResponse<{ flashcards: { front: string; back: string }[] }> =
       await service.chatCompletion(options);
 
     expect(result.content).toBeDefined();
@@ -527,9 +527,7 @@ describe("OpenRouterService - API Error Responses (US-004 CRITICAL)", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(APIError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "API request failed with status 502"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("API request failed with status 502");
   });
 });
 
@@ -617,9 +615,7 @@ describe("OpenRouterService - Response Validation (US-004 CRITICAL)", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(SchemaValidationError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "Invalid response format from OpenRouter API"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("Invalid response format from OpenRouter API");
   });
 
   it("throws APIError when response has no choices", async () => {
@@ -636,9 +632,7 @@ describe("OpenRouterService - Response Validation (US-004 CRITICAL)", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(APIError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "No completion choices returned from API"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("No completion choices returned from API");
   });
 
   it("throws SchemaValidationError when response content is not valid JSON", async () => {
@@ -653,9 +647,7 @@ describe("OpenRouterService - Response Validation (US-004 CRITICAL)", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(SchemaValidationError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "Failed to parse response content as JSON"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("Failed to parse response content as JSON");
   });
 
   it("throws SchemaValidationError when required field is missing", async () => {
@@ -709,9 +701,7 @@ describe("OpenRouterService - Response Validation (US-004 CRITICAL)", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(SchemaValidationError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "Response content is not an object"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("Response content is not an object");
   });
 
   it("accepts valid response matching schema", async () => {
@@ -752,9 +742,7 @@ describe("OpenRouterService - Network Errors", () => {
     const options = createValidOptions();
 
     await expect(service.chatCompletion(options)).rejects.toThrow(APIError);
-    await expect(service.chatCompletion(options)).rejects.toThrow(
-      "Unexpected error during API request"
-    );
+    await expect(service.chatCompletion(options)).rejects.toThrow("Unexpected error during API request");
   });
 
   it("preserves error message in wrapped APIError", async () => {

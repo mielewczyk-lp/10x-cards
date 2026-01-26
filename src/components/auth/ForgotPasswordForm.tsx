@@ -82,7 +82,7 @@ export default function ForgotPasswordForm() {
     <Card>
       <CardHeader>
         <CardTitle>Reset your password</CardTitle>
-        <CardDescription>We'll send you an email with instructions to reset your password</CardDescription>
+        <CardDescription>We&apos;ll send you an email with instructions to reset your password</CardDescription>
       </CardHeader>
       <CardContent>
         {success ? (
@@ -90,8 +90,8 @@ export default function ForgotPasswordForm() {
             <AlertDescription className="text-green-600 dark:text-green-500">
               <p className="font-medium mb-2">Check your email</p>
               <p>
-                We've sent password reset instructions to <strong>{email || "your email"}</strong>. Please check your
-                inbox and follow the link to reset your password.
+                We&apos;ve sent password reset instructions to <strong>{email || "your email"}</strong>. Please check
+                your inbox and follow the link to reset your password.
               </p>
             </AlertDescription>
           </Alert>

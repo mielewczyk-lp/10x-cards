@@ -123,7 +123,9 @@ export class ManualFlashcardPage {
     await this.page
       .waitForFunction(
         () => {
-          const inputs = document.querySelectorAll('textarea[placeholder*="question"], textarea[placeholder*="answer"]');
+          const inputs = document.querySelectorAll(
+            'textarea[placeholder*="question"], textarea[placeholder*="answer"]'
+          );
           return Array.from(inputs).every((input) => (input as HTMLTextAreaElement).value === "");
         },
         { timeout }

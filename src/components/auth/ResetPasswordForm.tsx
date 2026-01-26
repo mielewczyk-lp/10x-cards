@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import PasswordStrength from "./PasswordStrength";
 import { ResetPasswordSchema, getAuthErrorMessage } from "@/lib/validation/authSchemas";
 import type { ResetPasswordInput } from "@/lib/validation/authSchemas";

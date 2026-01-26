@@ -39,8 +39,8 @@ export class FlashcardApiHelper {
    * Returns array of created flashcard IDs
    */
   async createFlashcardBatch(
-    flashcards: Array<{ front: string; back: string }>
-  ): Promise<Array<{ id: string; front: string; back: string }>> {
+    flashcards: { front: string; back: string }[]
+  ): Promise<{ id: string; front: string; back: string }[]> {
     // API expects array of flashcards
     const response = await this.page.request.post("/api/flashcards", {
       data: flashcards.map((fc) => ({
@@ -64,15 +64,15 @@ export class FlashcardApiHelper {
    * Waits a moment to ensure next_review_at is in the past relative to query time
    */
   async createFlashcardsForReview(
-    flashcards: Array<{ front: string; back: string }>
-  ): Promise<Array<{ id: string; front: string; back: string }>> {
+    flashcards: { front: string; back: string }[]
+  ): Promise<{ id: string; front: string; back: string }[]> {
     const created = await this.createFlashcardBatch(flashcards);
-    
+
     // Wait to ensure the flashcards' next_review_at (set to NOW() on creation)
     // is definitely in the past when the review session queries for flashcards
     // Increased timeout to handle potential clock skew and DB latency
     await this.page.waitForTimeout(2000);
-    
+
     return created;
   }
 
@@ -99,7 +99,7 @@ export class FlashcardApiHelper {
   /**
    * Get all flashcards for the current user
    */
-  async getAllFlashcards(): Promise<Array<{ id: string }>> {
+  async getAllFlashcards(): Promise<{ id: string }[]> {
     const response = await this.page.request.get("/api/flashcards?pageSize=100");
 
     if (!response.ok()) {
@@ -116,7 +116,7 @@ export class FlashcardApiHelper {
   async deleteAllFlashcards(): Promise<void> {
     const flashcards = await this.getAllFlashcards();
     const ids = flashcards.map((fc: { id: string }) => fc.id);
-    
+
     if (ids.length > 0) {
       await this.deleteFlashcardBatch(ids);
     }
