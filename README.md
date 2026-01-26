@@ -1,4 +1,4 @@
-# 10x Cards project
+# 10x Cards
 
 ![Status](https://img.shields.io/badge/status-in_progress-yellow) ![Version](https://img.shields.io/badge/version-0.0.1-blue) ![License](https://img.shields.io/badge/license-TBD-lightgrey)
 
