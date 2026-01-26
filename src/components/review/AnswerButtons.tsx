@@ -16,7 +16,7 @@ interface AnswerButtonsProps {
  */
 export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-2xl mx-auto">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-2xl mx-auto" data-testid="answer-buttons">
       <Button
         onClick={() => onAnswer(0)}
         disabled={disabled}
@@ -24,6 +24,7 @@ export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps
         size="lg"
         className="w-full"
         aria-label="Again - I forgot completely"
+        data-testid="answer-button-again"
       >
         <span className="flex flex-col items-center gap-1">
           <span className="font-semibold">Again</span>
@@ -38,6 +39,7 @@ export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps
         size="lg"
         className="w-full border-orange-500 text-orange-600 hover:bg-orange-50 dark:border-orange-600 dark:text-orange-400 dark:hover:bg-orange-950"
         aria-label="Hard - I barely remembered"
+        data-testid="answer-button-hard"
       >
         <span className="flex flex-col items-center gap-1">
           <span className="font-semibold">Hard</span>
@@ -52,6 +54,7 @@ export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps
         size="lg"
         className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:border-green-600 dark:text-green-400 dark:hover:bg-green-950"
         aria-label="Good - I remembered correctly"
+        data-testid="answer-button-good"
       >
         <span className="flex flex-col items-center gap-1">
           <span className="font-semibold">Good</span>
@@ -66,6 +69,7 @@ export function AnswerButtons({ onAnswer, disabled = false }: AnswerButtonsProps
         size="lg"
         className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-600 dark:text-blue-400 dark:hover:bg-blue-950"
         aria-label="Easy - I remembered perfectly"
+        data-testid="answer-button-easy"
       >
         <span className="flex flex-col items-center gap-1">
           <span className="font-semibold">Easy</span>
