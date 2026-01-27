@@ -50,7 +50,7 @@ export class GenerationSourceForbiddenError extends Error {
 export class GenerationSourceService {
   constructor(
     private supabase: SupabaseClient,
-    private flashcardGenerationService: FlashcardGenerationService
+    private flashcardGenerationService?: FlashcardGenerationService
   ) {}
 
   /**
@@ -94,6 +94,9 @@ export class GenerationSourceService {
     let modelName: string;
 
     try {
+      if (!this.flashcardGenerationService) {
+        throw new Error("FlashcardGenerationService is required for generating flashcards");
+      }
       const result = await this.flashcardGenerationService.generate(inputText);
       candidates = result.candidates;
       modelName = result.modelName;

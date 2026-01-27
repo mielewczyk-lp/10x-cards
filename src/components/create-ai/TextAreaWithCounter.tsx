@@ -40,16 +40,15 @@ export function TextAreaWithCounter({ value, onChange, charCount, error, disable
               {error}
             </p>
           )}
+          {!error && charCount >= 1000 && charCount <= 10000 && (
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">✓ Text length is valid</p>
+          )}
         </div>
 
         <p id={counterId} className={`text-sm font-medium ${getCounterColor()}`} aria-live="polite" aria-atomic="true">
           {charCount.toLocaleString()} / 10,000 characters
         </p>
       </div>
-
-      {charCount >= 1000 && charCount <= 10000 && (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">✓ Text length is valid</p>
-      )}
     </div>
   );
 }
