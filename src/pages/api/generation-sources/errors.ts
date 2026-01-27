@@ -2,8 +2,6 @@ import type { APIRoute } from "astro";
 
 import type { ErrorLogsResponseDto, ErrorResponseDto } from "../../../types";
 import { GenerationSourceService } from "../../../lib/services/generationSourceService";
-import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
-import { getEnv } from "../../../lib/env";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -33,10 +31,8 @@ export const GET: APIRoute = async ({ locals }) => {
   }
 
   try {
-    // Step 1: Create service (we pass a dummy flashcard service since we don't need it for listing)
-    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime) ?? "";
-    const flashcardService = createFlashcardGenerationService(apiKey);
-    const generationSourceService = new GenerationSourceService(supabase, flashcardService);
+    // Step 1: Create service (flashcard service not needed for listing errors)
+    const generationSourceService = new GenerationSourceService(supabase);
 
     // Step 2: Fetch all error logs
     const errors = await generationSourceService.listErrors(user.id);

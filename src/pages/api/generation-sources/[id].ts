@@ -8,8 +8,6 @@ import {
   GenerationSourceNotFoundError,
   GenerationSourceForbiddenError,
 } from "../../../lib/services/generationSourceService";
-import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
-import { getEnv } from "../../../lib/env";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -71,21 +69,8 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 
     const validatedData = UpdateGenerationSourceSchema.parse(body);
 
-    // Step 2: Create service (FlashcardGenerationService not needed for update, but constructor requires it)
-    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime);
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          error: {
-            message: "AI service configuration error",
-          },
-        } satisfies ErrorResponseDto),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    const flashcardService = createFlashcardGenerationService(apiKey);
-    const generationSourceService = new GenerationSourceService(supabase, flashcardService);
+    // Step 2: Create service (FlashcardGenerationService not needed for update)
+    const generationSourceService = new GenerationSourceService(supabase);
 
     // Step 3: Update generation source statistics
     await generationSourceService.updateStats(id, validatedData, user.id);
@@ -191,21 +176,8 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
   }
 
   try {
-    // Create service (FlashcardGenerationService not needed for delete, but constructor requires it)
-    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime);
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          error: {
-            message: "AI service configuration error",
-          },
-        } satisfies ErrorResponseDto),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    const flashcardService = createFlashcardGenerationService(apiKey);
-    const generationSourceService = new GenerationSourceService(supabase, flashcardService);
+    // Create service (FlashcardGenerationService not needed for delete)
+    const generationSourceService = new GenerationSourceService(supabase);
 
     // Delete generation source using the service
     await generationSourceService.delete(id, user.id);
