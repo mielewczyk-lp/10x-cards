@@ -1,5 +1,3 @@
-import crypto from "node:crypto";
-
 import type { SupabaseClient } from "../../db/supabase.client";
 import type {
   CreateGenerationSourceResponseDto,
@@ -10,6 +8,17 @@ import type {
   UpdateGenerationSourceCommand,
 } from "../../types";
 import type { FlashcardGenerationService } from "./flashcardGenerationService";
+
+/**
+ * Hash text using SHA-256 with Web Crypto API (compatible with Cloudflare Workers)
+ */
+async function hashText(text: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 /**
  * Error thrown when the AI service is unavailable or returns an error
@@ -62,8 +71,8 @@ export class GenerationSourceService {
    * @throws AIServiceError if AI generation fails
    */
   async create(inputText: string, userId: string): Promise<CreateGenerationSourceResponseDto> {
-    // Hash the input text using MD5
-    const inputTextHash = crypto.createHash("md5").update(inputText).digest("hex");
+    // Hash the input text using SHA-256
+    const inputTextHash = await hashText(inputText);
 
     // Step 1: Insert initial record in generation_sources table
     const insertData: GenerationSourceInsert = {
@@ -224,7 +233,7 @@ export class GenerationSourceService {
     }
 
     // Map to DTOs (happy path)
-    return (errorLogs ?? []).map((log) => ({
+    return (errorLogs ?? []).map((log: { id: string; error_message: string | null; created_at: string }) => ({
       id: log.id,
       errorMessage: log.error_message ?? "",
       createdAt: log.created_at,
