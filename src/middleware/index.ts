@@ -15,6 +15,7 @@ const PUBLIC_PATHS = [
   "/api/auth/logout",
   "/api/auth/forgot-password",
   "/api/auth/reset-password",
+  "/api/auth/confirm-reset",
 ];
 
 // Paths that should redirect to /create if user is already logged in

@@ -77,8 +77,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      // Success - redirect to create page
-      window.location.href = "/create";
+      // Success - redirect based on mode
+      if (isRegister) {
+        // After registration, redirect to login with confirmation message
+        window.location.href = "/login?registered=true";
+      } else {
+        // After login, redirect to create page
+        window.location.href = "/create";
+      }
     } catch (err) {
       console.error("Auth error:", err);
       setFieldErrors({

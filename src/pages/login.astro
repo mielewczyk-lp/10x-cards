@@ -7,9 +7,9 @@ export const prerender = false;
 
 // Guard handled by middleware
 
-// Check for success messages from query params
+// Check for registration success
 const url = new URL(Astro.request.url);
-const resetSuccess = url.searchParams.get("reset") === "success";
+const justRegistered = url.searchParams.get("registered") === "true";
 ---
 
 <AuthLayout title="Login - 10x Cards">
@@ -19,11 +19,11 @@ const resetSuccess = url.searchParams.get("reset") === "success";
   </div>
 
   {
-    resetSuccess && (
+    justRegistered && (
       <div class="mb-6">
         <Alert>
-          <AlertDescription class="text-green-600 dark:text-green-500">
-            Password reset successful! You can now sign in with your new password.
+          <AlertDescription className="text-green-600 dark:text-green-500">
+            Registration successful! Please check your email to confirm your account.
           </AlertDescription>
         </Alert>
       </div>

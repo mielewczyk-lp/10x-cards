@@ -167,6 +167,12 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   SESSION_EXPIRED: "Your session has expired. Please log in again",
   UNAUTHORIZED: "You must be logged in to perform this action",
 
+  // Password reset link errors (from URL params)
+  invalid_link: "This reset link is invalid. Please request a new one",
+  expired_link: "This reset link has expired. Please request a new one",
+  invalid_type: "Invalid reset link type. Please request a new one",
+  server_error: "An error occurred while processing your reset link. Please try again",
+
   // API errors
   VALIDATION_ERROR: "Please check your input and try again",
   INTERNAL_ERROR: "An unexpected error occurred. Please try again later",

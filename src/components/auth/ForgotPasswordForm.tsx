@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, useId, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,8 +12,21 @@ export default function ForgotPasswordForm() {
   const [success, setSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [urlError, setUrlError] = useState<string | null>(null);
 
   const emailId = useId();
+
+  // Check for error in URL params (from redirect after failed reset link)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const errorParam = params.get("error");
+    if (errorParam) {
+      const errorMessage = getAuthErrorMessage(errorParam);
+      setUrlError(errorMessage);
+      // Clean URL without reloading
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +98,12 @@ export default function ForgotPasswordForm() {
         <CardDescription>We&apos;ll send you an email with instructions to reset your password</CardDescription>
       </CardHeader>
       <CardContent>
+        {urlError && (
+          <Alert className="mb-4 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950">
+            <AlertDescription className="text-red-600 dark:text-red-500">{urlError}</AlertDescription>
+          </Alert>
+        )}
+
         {success ? (
           <Alert>
             <AlertDescription className="text-green-600 dark:text-green-500">
