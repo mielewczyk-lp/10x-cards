@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { createSupabaseServerInstance } from "../../../db/supabase.client";
+import { getSupabaseEnv } from "../../../lib/env";
 
 export const prerender = false;
 
@@ -9,10 +10,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
-      env: {
-        SUPABASE_URL: locals.runtime.env.SUPABASE_URL,
-        SUPABASE_KEY: locals.runtime.env.SUPABASE_KEY,
-      },
+      env: getSupabaseEnv(locals),
     });
 
     // Sign out from Supabase

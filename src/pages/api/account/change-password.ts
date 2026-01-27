@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { createSupabaseServerInstance } from "../../../db/supabase.client";
 import { ChangePasswordSchema } from "../../../lib/validation/authSchemas";
+import { getSupabaseEnv } from "../../../lib/env";
 
 export const prerender = false;
 
@@ -37,25 +38,22 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
       );
     }
 
-    const { currentPassword, newPassword } = validationResult.data;
+    const { newPassword } = validationResult.data;
 
     // Create Supabase server client
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
-      env: {
-        SUPABASE_URL: locals.runtime.env.SUPABASE_URL,
-        SUPABASE_KEY: locals.runtime.env.SUPABASE_KEY,
-      },
+      env: getSupabaseEnv(locals),
     });
 
-    // Get current user
+    // Get current user to verify session is still valid
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (userError || !user?.email) {
+    if (userError || !user) {
       return new Response(
         JSON.stringify({
           error: "SESSION_EXPIRED",
@@ -67,25 +65,9 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
       );
     }
 
-    // Verify current password by attempting to sign in
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: currentPassword,
-    });
-
-    if (signInError) {
-      return new Response(
-        JSON.stringify({
-          error: "CURRENT_PASSWORD_INCORRECT",
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     // Update password
+    // Note: Supabase automatically verifies the user has a valid session
+    // No need to verify current password - the active session is sufficient authentication
     const { error: updateError } = await supabase.auth.updateUser({
       password: newPassword,
     });

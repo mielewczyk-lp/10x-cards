@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { createSupabaseServerInstance } from "../../../db/supabase.client";
 import { ResetPasswordSchema } from "../../../lib/validation/authSchemas";
+import { getSupabaseEnv } from "../../../lib/env";
 
 export const prerender = false;
 
@@ -30,19 +31,32 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
-      env: {
-        SUPABASE_URL: locals.runtime.env.SUPABASE_URL,
-        SUPABASE_KEY: locals.runtime.env.SUPABASE_KEY,
-      },
+      env: getSupabaseEnv(locals),
     });
 
+    // Check if user has a valid session first
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      console.error("Reset password failed: No active session");
+      return new Response(
+        JSON.stringify({
+          error: "INVALID_OR_EXPIRED_TOKEN",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Update password using the session from the reset link
-    // The access token should be in the cookies after clicking the reset link
     const { error } = await supabase.auth.updateUser({
       password: password,
     });
 
     if (error) {
+      console.error("Reset password failed:", error.message);
       // Map Supabase errors to user-friendly messages
       let errorCode = "PASSWORD_RESET_FAILED";
 

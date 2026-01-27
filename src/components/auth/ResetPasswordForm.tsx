@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, useId, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,14 @@ export default function ResetPasswordForm() {
 
   const passwordId = useId();
   const confirmPasswordId = useId();
+
+  // Clean up URL query params after code exchange
+  // The middleware exchanges the 'code' for a session, so we can safely remove it from URL
+  useEffect(() => {
+    if (window.location.search.includes("code=")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

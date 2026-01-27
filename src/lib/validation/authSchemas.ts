@@ -67,18 +67,15 @@ export const RegisterSchema = z
 /**
  * Validation schema for password change
  * Validates:
- * - currentPassword: required
  * - newPassword: required, meets password requirements
  * - confirmNewPassword: required, must match newPassword
+ * 
+ * Note: Current password verification is not required as the user
+ * must have a valid active session to access this endpoint.
+ * The session itself provides sufficient authentication.
  */
 export const ChangePasswordSchema = z
   .object({
-    currentPassword: z
-      .string({
-        required_error: "CURRENT_PASSWORD_REQUIRED",
-        invalid_type_error: "CURRENT_PASSWORD_INVALID",
-      })
-      .min(1, { message: "CURRENT_PASSWORD_REQUIRED" }),
     newPassword: passwordValidation,
     confirmNewPassword: z.string({
       required_error: "CONFIRM_NEW_PASSWORD_REQUIRED",
