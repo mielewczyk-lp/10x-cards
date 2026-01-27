@@ -71,8 +71,8 @@ export default function ResetPasswordForm() {
         return;
       }
 
-      // Success - redirect to login with success message
-      window.location.href = "/login?reset=success";
+      // Success - redirect to create page with success message
+      window.location.href = "/create?reset=success";
     } catch (err) {
       console.error("Password reset error:", err);
       setFieldErrors({ password: "An unexpected error occurred. Please try again." });

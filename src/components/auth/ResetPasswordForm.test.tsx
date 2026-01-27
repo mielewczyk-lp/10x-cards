@@ -85,8 +85,8 @@ describe("ResetPasswordForm", () => {
     });
   });
 
-  describe("Business Rule: Success flow (redirect to login)", () => {
-    it("should redirect to login with success message on successful reset", async () => {
+  describe("Business Rule: Success flow (redirect to create)", () => {
+    it("should redirect to create page with success message on successful reset", async () => {
       const user = userEvent.setup();
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -100,7 +100,7 @@ describe("ResetPasswordForm", () => {
       await user.click(screen.getByRole("button", { name: /reset password/i }));
 
       await waitFor(() => {
-        expect(window.location.href).toBe("/login?reset=success");
+        expect(window.location.href).toBe("/create?reset=success");
       });
     });
   });
