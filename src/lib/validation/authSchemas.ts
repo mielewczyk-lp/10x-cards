@@ -69,7 +69,7 @@ export const RegisterSchema = z
  * Validates:
  * - newPassword: required, meets password requirements
  * - confirmNewPassword: required, must match newPassword
- * 
+ *
  * Note: Current password verification is not required as the user
  * must have a valid active session to access this endpoint.
  * The session itself provides sufficient authentication.

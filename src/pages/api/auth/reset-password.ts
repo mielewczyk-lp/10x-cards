@@ -35,8 +35,10 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     });
 
     // Check if user has a valid session first
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) {
       console.error("Reset password failed: No active session");
       return new Response(
