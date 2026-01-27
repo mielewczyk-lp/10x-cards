@@ -1,17 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
 import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
 import type { AstroCookies } from "astro";
 
 import type { Database } from "./database.types";
 import { getEnv, type CloudflareRuntime } from "../lib/env";
-
-// For client-side usage (works locally and in build)
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-
-export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
-
-export type SupabaseClient = typeof supabaseClient;
 
 // Cookie options for server-side auth
 export const cookieOptions: CookieOptionsWithName = {
