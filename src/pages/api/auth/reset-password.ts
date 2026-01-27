@@ -4,7 +4,7 @@ import { ResetPasswordSchema } from "../../../lib/validation/authSchemas";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
   try {
     const body = await request.json();
 
@@ -30,6 +30,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
+      env: {
+        SUPABASE_URL: locals.runtime.env.SUPABASE_URL,
+        SUPABASE_KEY: locals.runtime.env.SUPABASE_KEY,
+      },
     });
 
     // Update password using the session from the reset link

@@ -33,7 +33,7 @@ export const GET: APIRoute = async ({ locals }) => {
 
   try {
     // Step 1: Create service (we pass a dummy flashcard service since we don't need it for listing)
-    const apiKey = import.meta.env.OPENROUTER_API_KEY ?? "";
+    const apiKey = locals.runtime.env.OPENROUTER_API_KEY ?? "";
     const flashcardService = createFlashcardGenerationService(apiKey);
     const generationSourceService = new GenerationSourceService(supabase, flashcardService);
 

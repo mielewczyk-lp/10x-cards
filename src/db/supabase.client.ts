@@ -33,8 +33,12 @@ function parseCookieHeader(cookieHeader: string): { name: string; value: string 
  * Create Supabase server instance with SSR cookie handling
  * Use this for server-side operations (middleware, API routes, SSR pages)
  */
-export const createSupabaseServerInstance = (context: { headers: Headers; cookies: AstroCookies }) => {
-  const supabase = createServerClient<Database>(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY, {
+export const createSupabaseServerInstance = (context: {
+  headers: Headers;
+  cookies: AstroCookies;
+  env: { SUPABASE_URL: string; SUPABASE_KEY: string };
+}) => {
+  const supabase = createServerClient<Database>(context.env.SUPABASE_URL, context.env.SUPABASE_KEY, {
     cookieOptions,
     cookies: {
       getAll() {

@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const validatedData = CreateGenerationSourceSchema.parse(body);
 
     // Step 2: Create services
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    const apiKey = locals.runtime.env.OPENROUTER_API_KEY;
     if (!apiKey) {
       return new Response(
         JSON.stringify({

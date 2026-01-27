@@ -3,12 +3,16 @@ import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
   try {
     // Create Supabase server client
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
+      env: {
+        SUPABASE_URL: locals.runtime.env.SUPABASE_URL,
+        SUPABASE_KEY: locals.runtime.env.SUPABASE_KEY,
+      },
     });
 
     // Sign out from Supabase
