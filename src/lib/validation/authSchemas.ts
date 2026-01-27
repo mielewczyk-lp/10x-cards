@@ -73,10 +73,12 @@ export const RegisterSchema = z
  */
 export const ChangePasswordSchema = z
   .object({
-    currentPassword: z.string({
-      required_error: "CURRENT_PASSWORD_REQUIRED",
-      invalid_type_error: "CURRENT_PASSWORD_INVALID",
-    }).min(1, { message: "CURRENT_PASSWORD_REQUIRED" }),
+    currentPassword: z
+      .string({
+        required_error: "CURRENT_PASSWORD_REQUIRED",
+        invalid_type_error: "CURRENT_PASSWORD_INVALID",
+      })
+      .min(1, { message: "CURRENT_PASSWORD_REQUIRED" }),
     newPassword: passwordValidation,
     confirmNewPassword: z.string({
       required_error: "CONFIRM_NEW_PASSWORD_REQUIRED",
