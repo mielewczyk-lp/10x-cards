@@ -75,6 +75,10 @@ jobs:
       
       - name: Build application
         run: npm run build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
       
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

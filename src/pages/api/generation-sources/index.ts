@@ -5,6 +5,7 @@ import type { ErrorResponseDto } from "../../../types";
 import { CreateGenerationSourceSchema } from "../../../lib/validation/generationSourceSchemas";
 import { GenerationSourceService, AIServiceError } from "../../../lib/services/generationSourceService";
 import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
+import { getEnv } from "../../../lib/env";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -56,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const validatedData = CreateGenerationSourceSchema.parse(body);
 
     // Step 2: Create services
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime);
     if (!apiKey) {
       return new Response(
         JSON.stringify({
