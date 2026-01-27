@@ -2,11 +2,17 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./db/database.types";
+import type { Runtime } from "@astrojs/cloudflare";
 
 declare global {
   namespace App {
     interface Locals {
       supabase: SupabaseClient<Database>;
+      runtime: Runtime<{
+        SUPABASE_URL: string;
+        SUPABASE_KEY: string;
+        OPENROUTER_API_KEY: string;
+      }>;
       user?: {
         id: string;
         email: string;

@@ -9,6 +9,7 @@ import {
   GenerationSourceForbiddenError,
 } from "../../../lib/services/generationSourceService";
 import { createFlashcardGenerationService } from "../../../lib/services/flashcardGenerationService";
+import { getEnv } from "../../../lib/env";
 
 // Disable prerendering for this API route
 export const prerender = false;
@@ -71,7 +72,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     const validatedData = UpdateGenerationSourceSchema.parse(body);
 
     // Step 2: Create service (FlashcardGenerationService not needed for update, but constructor requires it)
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime);
     if (!apiKey) {
       return new Response(
         JSON.stringify({
@@ -191,7 +192,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
 
   try {
     // Create service (FlashcardGenerationService not needed for delete, but constructor requires it)
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    const apiKey = getEnv("OPENROUTER_API_KEY", locals.runtime);
     if (!apiKey) {
       return new Response(
         JSON.stringify({

@@ -37,6 +37,10 @@ For better TypeScript support, create or update `src/env.d.ts`:
 
 ```typescript
 /// <reference types="astro/client" />
+/// <reference types="@astrojs/cloudflare" />
+
+import type { Runtime } from "@astrojs/cloudflare";
+
 interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
   readonly SUPABASE_KEY: string;
@@ -45,10 +49,25 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare global {
+  namespace App {
+    interface Locals {
+      runtime: Runtime<{
+        SUPABASE_URL: string;
+        SUPABASE_KEY: string;
+      }>;
+    }
+  }
+}
 ```
 When introducing new env variables or values stored on Astro.locals, always update `src/env.d.ts` to reflect these changes.
 
 Make sure `.env.example` is updated with the correct environment variables.
+
+**IMPORTANT for Cloudflare Pages**: Environment variables must be configured in:
+1. Cloudflare Pages Dashboard (Settings → Environment variables) for runtime access
+2. GitHub Actions workflow build step for build-time access
 
 ## Implementation Steps
 
