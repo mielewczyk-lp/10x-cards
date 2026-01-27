@@ -19,7 +19,7 @@ export default function ResetPasswordForm() {
   // Clean up URL query params after code exchange
   // The middleware exchanges the 'code' for a session, so we can safely remove it from URL
   useEffect(() => {
-    if (window.location.search.includes("code=")) {
+    if (window.location?.search?.includes("code=")) {
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
