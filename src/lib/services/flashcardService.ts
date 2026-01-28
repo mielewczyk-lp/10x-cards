@@ -230,7 +230,7 @@ export class FlashcardService {
       // Use Postgres full-text search on search_vector column
       dbQuery = dbQuery.textSearch("search_vector", searchQuery, {
         type: "websearch",
-        config: "english",
+        config: "simple",
       });
     }
 
