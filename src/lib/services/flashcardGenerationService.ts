@@ -15,7 +15,7 @@ export interface FlashcardGenerationConfig {
  * Default configuration for flashcard generation
  */
 const DEFAULT_CONFIG: FlashcardGenerationConfig = {
-  model: "google/gemma-3-27b-it:free",
+  model: "openai/gpt-4o-mini",
   temperature: 0.7,
   maxTokens: 2048,
 };
